@@ -1,0 +1,47 @@
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Шаблон (4.6)"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://Textures/icon.svg"
+
+[autoload]
+
+Analytics="*uid://b6yfippsnm3v4"
+
+[display]
+
+window/size/viewport_width=540
+window/size/viewport_height=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_width"
+window/stretch/scale=0.5
+
+[editor]
+
+movie_writer/dynamic_fonts/use_oversampling=false
+
+[file_customization]
+
+folder_colors={
+"res://Class/": "red",
+"res://Font/": "orange",
+"res://Localization/": "yellow",
+"res://Save/": "green",
+"res://Scenes/": "teal",
+"res://Textures/": "blue"
+}
+
+[internationalization]
+
+locale/translation_remaps={}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
