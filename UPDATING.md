@@ -4,10 +4,13 @@
 (remote `godot-template`). Полную политику веток (что такое `Стабильные`/`Бета`/`alpha/*`) см. в
 `BRANCHES.md` в корне репозитория шаблона — здесь только команды для потребителя.
 
-⚠️ **`git subtree split` не работает** для этого репозитория — падает с
-`fatal: assertion failed` из-за известного бага git-subtree с пробелом в пути
-(`Сам проект/Godot_Template`). Вместо него ветки-срезы (`export/*`) обновляются вручную через
-plumbing-команды (см. «Обновление общего кода» ниже).
+⚠️ **`git subtree split` и `git subtree push` не работают, если путь до папки у вас содержит
+пробел** (например `Сам проект/Godot_Template`, как в Life_Operator) — падает с
+`fatal: assertion failed`, известный баг git-subtree. Если у вас путь без пробела (например
+просто `Godot_Template`, как в Power_struggle) — обычный `git subtree push` работает нормально,
+это ограничение только `split`. Если путь с пробелом — используйте ручной вариант через
+plumbing-команды (см. «Отправить правки обратно» ниже) и для `split` (см. «Обновление общего
+кода»), и для push.
 
 ## Разовая настройка (уже сделана в этом проекте)
 
@@ -46,8 +49,18 @@ git push origin export/Стабильные --force
 починили баг в общем коде) — это не должно просто остаться только здесь. Отправьте изменения в
 приёмную ветку этого проекта в репозитории шаблона:
 
+Путь без пробела (например `Godot_Template`, как в Power_struggle) — обычный subtree push:
 ```bash
 git subtree push --prefix=Godot_Template godot-template <ИмяЭтогоПроекта>
+```
+
+Путь с пробелом (например `Сам проект/Godot_Template`, как в Life_Operator) — `subtree push`
+падает с тем же багом, что и `split` (см. предупреждение выше), поэтому вручную:
+```bash
+git fetch godot-template <ИмяЭтогоПроекта>
+TREE=$(git rev-parse "HEAD:Сам проект/Godot_Template")
+NEWCOMMIT=$(git commit-tree "$TREE" -m "Godot_Template/ из <ИмяЭтогоПроекта>" -p FETCH_HEAD)
+git push godot-template "$NEWCOMMIT":<ИмяЭтогоПроекта>
 ```
 
 `<ИмяЭтогоПроекта>` — `Life_Operator` или `Power_struggle`, приёмная ветка того же имени в
