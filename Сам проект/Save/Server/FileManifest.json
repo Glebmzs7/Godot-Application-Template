@@ -1,0 +1,282 @@
+{
+	"res://.editorconfig": {
+		"FirstByte": 114,
+		"LastByte": 10,
+		"Size": 33
+	},
+	"res://.gitattributes": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 80
+	},
+	"res://.gitignore": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 46
+	},
+	"res://.vscode/launch.json": {
+		"FirstByte": 123,
+		"LastByte": 125,
+		"Size": 609
+	},
+	"res://Class/Class_ArrayAndOrDictionary.gd": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 58966
+	},
+	"res://Class/Class_ArrayAndOrDictionary.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Class/Class_FileIntegrity.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 10165
+	},
+	"res://Class/Class_FileIntegrity.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Class/Class_Help.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 8099
+	},
+	"res://Class/Class_Help.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 19
+	},
+	"res://Class/Class_Internet.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 20750
+	},
+	"res://Class/Class_Internet.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 21
+	},
+	"res://Class/Class_InternetClient.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 25589
+	},
+	"res://Class/Class_InternetClient.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 19
+	},
+	"res://Class/Class_InternetServer.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 41730
+	},
+	"res://Class/Class_InternetServer.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 19
+	},
+	"res://Class/Class_Json.gd": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 6359
+	},
+	"res://Class/Class_Json.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 21
+	},
+	"res://Class/Class_Localization.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 15104
+	},
+	"res://Class/Class_Localization.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 19
+	},
+	"res://Class/Class_Logger.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 47147
+	},
+	"res://Class/Class_Logger.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Class/Class_UI.gd": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 43051
+	},
+	"res://Class/Class_UI.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 21
+	},
+	"res://Font/Cardo/Cardo-Bold.ttf": {
+		"FirstByte": 0,
+		"LastByte": 0,
+		"Size": 340804
+	},
+	"res://Font/Cardo/Cardo-Bold.ttf.import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 897
+	},
+	"res://Font/Cardo/Cardo-Italic.ttf": {
+		"FirstByte": 0,
+		"LastByte": 0,
+		"Size": 254968
+	},
+	"res://Font/Cardo/Cardo-Italic.ttf.import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 772
+	},
+	"res://Font/Cardo/Cardo-Regular.ttf": {
+		"FirstByte": 0,
+		"LastByte": 0,
+		"Size": 391336
+	},
+	"res://Font/Cardo/Cardo-Regular.ttf.import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 774
+	},
+	"res://Font/Cardo/OFL.txt": {
+		"FirstByte": 67,
+		"LastByte": 10,
+		"Size": 4466
+	},
+	"res://Localization/Localization.csv": {
+		"FirstByte": 107,
+		"LastByte": 10,
+		"Size": 7814
+	},
+	"res://Localization/Localization.csv.import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 741
+	},
+	"res://Localization/Localization.de.translation": {
+		"FirstByte": 82,
+		"LastByte": 67,
+		"Size": 3311
+	},
+	"res://Localization/Localization.en.translation": {
+		"FirstByte": 82,
+		"LastByte": 67,
+		"Size": 2988
+	},
+	"res://Localization/Localization.es.translation": {
+		"FirstByte": 82,
+		"LastByte": 67,
+		"Size": 3271
+	},
+	"res://Localization/Localization.fr.translation": {
+		"FirstByte": 82,
+		"LastByte": 67,
+		"Size": 3255
+	},
+	"res://Localization/Localization.ru.translation": {
+		"FirstByte": 82,
+		"LastByte": 67,
+		"Size": 4191
+	},
+	"res://README.md": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 3656
+	},
+	"res://Scenes/Start_Program/Start_Program.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 367231
+	},
+	"res://Scenes/Start_Program/Start_Program.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 19
+	},
+	"res://Scenes/Start_Program/Start_Program.tscn": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 373
+	},
+	"res://Scenes/UIScenes/Home/Home.tscn": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 350
+	},
+	"res://Scenes/UIScenes/Home/home.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 1134
+	},
+	"res://Scenes/UIScenes/Home/home.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Scenes/test/test.gd": {
+		"FirstByte": 101,
+		"LastByte": 10,
+		"Size": 13438
+	},
+	"res://Scenes/test/test.gd.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Scenes/test/test.tscn": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 235
+	},
+	"res://ShablonUI.md": {
+		"FirstByte": 35,
+		"LastByte": 10,
+		"Size": 6870
+	},
+	"res://Shaders/ModalOverlayBlur.gdshader": {
+		"FirstByte": 47,
+		"LastByte": 10,
+		"Size": 4080
+	},
+	"res://Shaders/ModalOverlayBlur.gdshader.uid": {
+		"FirstByte": 117,
+		"LastByte": 10,
+		"Size": 20
+	},
+	"res://Textures/icon.svg": {
+		"FirstByte": 60,
+		"LastByte": 62,
+		"Size": 994
+	},
+	"res://Textures/icon.svg (2).import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 852
+	},
+	"res://Textures/icon.svg.import": {
+		"FirstByte": 91,
+		"LastByte": 10,
+		"Size": 1022
+	},
+	"res://gitignore": {
+		"FirstByte": 13,
+		"LastByte": 10,
+		"Size": 2
+	},
+	"res://project.godot": {
+		"FirstByte": 59,
+		"LastByte": 10,
+		"Size": 1089
+	}
+}

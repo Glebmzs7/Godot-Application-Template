@@ -1,0 +1,136 @@
+{
+	"Streams": {
+		"0": [
+			[
+				1317859.0,
+				"Stream created: System",
+				[],
+				null
+			],
+			[
+				1184524.0,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			],
+			[
+				1184729,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				1319059.0,
+				"Stream created: StartProgram",
+				[],
+				null
+			],
+			[
+				1326040.0,
+				"_ready: Logger check passed",
+				[],
+				null
+			],
+			[
+				1404473.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"MusicVolume",
+					82.0
+				],
+				null
+			],
+			[
+				1404489.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"InterfaceVolume",
+					68.0
+				],
+				null
+			],
+			[
+				1404709.0,
+				"_fC_RebuildLanguageList_Ch",
+				[
+					"",
+					[
+						"ru",
+						"en",
+						"de",
+						"fr",
+						"es"
+					]
+				],
+				null
+			],
+			[
+				1406546.0,
+				"_ready: Interface check passed",
+				[],
+				null
+			],
+			[
+				2521075.0,
+				"_fC_RebuildLanguageList_Ch",
+				[
+					"",
+					[
+						"ru",
+						"en",
+						"de",
+						"fr",
+						"es"
+					]
+				],
+				null
+			],
+			[
+				2521848.0,
+				"_fC_RescaleFonts_Ch",
+				[
+					143.0
+				],
+				null
+			],
+			[
+				5612580.0,
+				"AccountPicker: нажата заглушка OAuth",
+				[
+					"Google"
+				],
+				null
+			],
+			[
+				16112073.0,
+				"AccountPicker: нажата заглушка OAuth",
+				[
+					"VK"
+				],
+				null
+			],
+			[
+				16662410.0,
+				"AccountPicker: нажата заглушка OAuth",
+				[
+					"Yandex"
+				],
+				null
+			],
+			[
+				1184535.0,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			],
+			[
+				1184737,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		]
+	}
+}

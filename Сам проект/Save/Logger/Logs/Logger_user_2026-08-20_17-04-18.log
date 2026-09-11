@@ -1,0 +1,20 @@
+{
+	"Streams": {
+		"0": [
+			[
+				1072446,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				1073391,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		]
+	}
+}

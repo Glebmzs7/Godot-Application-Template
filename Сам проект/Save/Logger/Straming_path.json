@@ -1,0 +1,15 @@
+{
+	"SessionFile": "res://Save/Logger/Logs/Logger_user_2026-08-28_16-17-17.log",
+	"Streams": {
+		"0": {
+			"name": "System",
+			"started_at": 1225727,
+			"status": "active"
+		},
+		"1": {
+			"name": "StartProgram",
+			"started_at": 1234350,
+			"status": "finished"
+		}
+	}
+}

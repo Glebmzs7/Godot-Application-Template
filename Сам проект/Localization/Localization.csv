@@ -1,0 +1,67 @@
+keys,ru,en,de,fr,es
+SETTINGS_TITLE,Настройки,Settings,Einstellungen,Paramètres,Configuración
+SUPPORT_TITLE,Поддержка,Support,Support,Support,Soporte
+SUPPORT_BODY,Поддержка пока не подключена,Support is not connected yet,Der Support ist noch nicht verbunden,Le support n'est pas encore connecté,El soporte aún no está conectado
+CATEGORY_LANGUAGE,Язык,Language,Sprache,Langue,Idioma
+CATEGORY_SCREEN,Размер окна,Window size,Fenstergröße,Taille de la fenêtre,Tamaño de ventana
+CATEGORY_SOUND,Звук,Sound,Ton,Son,Sonido
+LANG_RU,Русский,Russian,Russisch,Russe,Ruso
+LANG_EN,Английский,English,Englisch,Anglais,Inglés
+LANG_DE,Немецкий,German,Deutsch,Allemand,Alemán
+LANG_FR,Французский,French,Französisch,Français,Francés
+LANG_ES,Испанский,Spanish,Spanisch,Espagnol,Español
+SEARCH_PLACEHOLDER,Поиск,Search,Suche,Recherche,Buscar
+SCREEN_WIDTH,Ширина,Width,Breite,Largeur,Anchura
+SCREEN_HEIGHT,Высота,Height,Höhe,Hauteur,Altura
+SCREEN_FULLSCREEN,Полный экран,Fullscreen,Vollbild,Plein écran,Pantalla completa
+SOUND_MUSIC,Музыка,Music,Musik,Musique,Música
+SOUND_INTERFACE,Интерфейс,Interface,Oberfläche,Interface,Interfaz
+CATEGORY_CONFIRMATIONS,Подтверждения,Confirmations,Bestätigungen,Confirmations,Confirmaciones
+SCREEN_CHANGE_INFO,Размер экрана применится после закрытия настроек,Screen size will apply after closing settings,Die Bildschirmgröße wird nach dem Schließen der Einstellungen übernommen,La taille de l'écran sera appliquée après la fermeture des paramètres,El tamaño de la pantalla se aplicará después de cerrar la configuración
+DONT_SHOW_AGAIN,Больше не показывать,Don't show again,Nicht mehr anzeigen,Ne plus afficher,No volver a mostrar
+OK_UNDERSTOOD,Понял,Got it,Verstanden,Compris,Entendido
+SCREEN_APPLY_CONFIRM_TEXT,Применить новый размер экрана?,Apply the new screen size?,Neue Bildschirmgröße übernehmen?,Appliquer la nouvelle taille d'écran ?,¿Aplicar el nuevo tamaño de pantalla?
+CANCEL,Отмена,Cancel,Abbrechen,Annuler,Cancelar
+APPLY,Применить,Apply,Übernehmen,Appliquer,Aplicar
+CONFIRM_SCREEN_INFO_LABEL,Окно информации об изменении экрана,Screen change information window,Infofenster zur Bildschirmänderung,Fenêtre d'information sur le changement d'écran,Ventana de información sobre el cambio de pantalla
+CONFIRM_SCREEN_APPLY_LABEL,Окно подтверждения применения экрана,Screen apply confirmation window,Bestätigungsfenster für die Bildschirmänderung,Fenêtre de confirmation d'application de l'écran,Ventana de confirmación de aplicación de pantalla
+CONFIRM_TOGGLE_ON,Показывать,Show,Anzeigen,Afficher,Mostrar
+CONFIRM_TOGGLE_OFF,Скрыто,Hidden,Ausgeblendet,Masqué,Oculto
+SCREEN_PRESETS_HORIZONTAL,Горизонтальный,Horizontal,Horizontal,Horizontal,Horizontal
+SCREEN_PRESETS_VERTICAL,Вертикальный,Vertical,Vertikal,Vertical,Vertical
+PRESET_VGA,VGA,VGA,VGA,VGA,VGA
+PRESET_SVGA,SVGA,SVGA,SVGA,SVGA,SVGA
+PRESET_XGA,XGA,XGA,XGA,XGA,XGA
+PRESET_UXGA,UXGA,UXGA,UXGA,UXGA,UXGA
+PRESET_SXGA,SXGA,SXGA,SXGA,SXGA,SXGA
+PRESET_WXGA,WXGA,WXGA,WXGA,WXGA,WXGA
+PRESET_WUXGA,WUXGA,WUXGA,WUXGA,WUXGA,WUXGA
+PRESET_HD720,HD,HD,HD,HD,HD
+PRESET_FHD1080,FHD,FHD,FHD,FHD,FHD
+PRESET_QHD1440,QHD,QHD,QHD,QHD,QHD
+PRESET_4KUHD,4K,4K,4K,4K,4K
+PRESET_5K,5K,5K,5K,5K,5K
+PRESET_8KUHD,8K,8K,8K,8K,8K
+PRESET_WQHD,WQHD,WQHD,WQHD,WQHD,WQHD
+PRESET_DCI4K,DCI 4K,DCI 4K,DCI 4K,DCI 4K,DCI 4K
+CONFIRM_SOURCE_SETTINGS,Настройки,Settings,Einstellungen,Paramètres,Configuración
+CONFIRM_SOURCE_TRAINING,Обучение,Training,Schulung,Formation,Formación
+CONFIRM_SECTION_AUTOCLICK,Автоматическое нажатие человеком,Automatic human click,Automatischer menschlicher Klick,Clic humain automatique,Clic humano automático
+CONFIRM_SECTION_WINDOWS,Окна подтверждения и информирования,Confirmation and notification windows,Bestätigungs- und Informationsfenster,Fenêtres de confirmation et d'information,Ventanas de confirmación e información
+CONFIRM_PROTECTION_LABEL,Защита от автоматического пропуска,Protection from automatic skipping,Schutz vor automatischem Überspringen,Protection contre le saut automatique,Protección contra el salto automático
+CONFIRM_DODGE_LIMIT_LABEL,Количество телепортов,Number of teleports,Anzahl der Teleportierungen,Nombre de téléportations,Número de teletransportes
+SCREEN_FONT_SCALE,Размер шрифта,Font size,Schriftgröße,Taille de police,Tamaño de fuente
+SCREEN_SECTION_SIZE,Размер экрана,Screen size,Bildschirmgröße,Taille de l'écran,Tamaño de pantalla
+SCREEN_SECTION_FONT,Шрифт,Font,Schrift,Police,Fuente
+SCREEN_APPLY_COUNTDOWN_LABEL,Доступно через:,Available in:,Verfügbar in:,Disponible dans :,Disponible en:
+CATEGORY_LOGGER,Логи и реплеи,Logs & replays,Protokolle & Wiederholungen,Journaux et replays,Registros y repeticiones
+LOGGER_SECTION_LOGS,Логи программы,Program logs,Programmprotokolle,Journaux du programme,Registros del programa
+LOGGER_SECTION_REPLAYS,Реплеи,Replays,Wiederholungen,Replays,Repeticiones
+LOGGER_LOG_MAX_COUNT_LABEL,Максимальное количество логов,Maximum number of logs,Maximale Anzahl an Protokollen,Nombre maximal de journaux,Número máximo de registros
+LOGGER_LOG_MAX_AGE_LABEL,Максимальное время хранения логов (дней),Maximum log retention (days),Maximale Aufbewahrung von Protokollen (Tage),Durée maximale de conservation des journaux (jours),Retención máxima de registros (días)
+LOGGER_LOG_MAX_SIZE_LABEL,Максимальный объём памяти логов (МБ),Maximum log storage (MB),Maximaler Speicherplatz für Protokolle (MB),Espace de stockage maximal des journaux (Mo),Almacenamiento máximo de registros (MB)
+LOGGER_REPLAY_MAX_COUNT_LABEL,Максимальное количество реплеев,Maximum number of replays,Maximale Anzahl an Wiederholungen,Nombre maximal de replays,Número máximo de repeticiones
+LOGGER_REPLAY_MAX_AGE_LABEL,Максимальное время хранения реплеев (дней),Maximum replay retention (days),Maximale Aufbewahrung von Wiederholungen (Tage),Durée maximale de conservation des replays (jours),Retención máxima de repeticiones (días)
+LOGGER_REPLAY_MAX_SIZE_LABEL,Максимальный объём памяти реплеев (МБ),Maximum replay storage (MB),Maximaler Speicherplatz für Wiederholungen (MB),Espace de stockage maximal des replays (Mo),Almacenamiento máximo de repeticiones (MB)
+LOGGER_RESTART_INFO,Изменения лимитов логов и реплеев вступят в силу после перезапуска программы,Log and replay limit changes will take effect after restarting the program,Änderungen der Protokoll- und Wiederholungslimits werden nach einem Neustart des Programms wirksam,Les modifications des limites de journaux et de replays prendront effet après le redémarrage du programme,Los cambios en los límites de registros y repeticiones tendrán efecto después de reiniciar el programa
+CONFIRM_LOGGER_INFO_LABEL,Окно информации об изменении логов и реплеев,Logs and replays change information window,Infofenster zur Änderung von Protokollen und Wiederholungen,Fenêtre d'information sur la modification des journaux et replays,Ventana de información sobre el cambio de registros y repeticiones

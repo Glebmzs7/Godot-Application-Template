@@ -1,0 +1,119 @@
+{
+	"Streams": {
+		"0": [
+			[
+				1827300.0,
+				"Stream created: System",
+				[],
+				null
+			],
+			[
+				998367,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				1828198.0,
+				"Stream created: StartProgram",
+				[],
+				null
+			],
+			[
+				1828883.0,
+				"_ready: Logger check passed",
+				[],
+				null
+			],
+			[
+				1938871.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"MusicVolume",
+					82.0
+				],
+				null
+			],
+			[
+				1938888.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"InterfaceVolume",
+					68.0
+				],
+				null
+			],
+			[
+				1938901.0,
+				"_fC_OnConfirmationToggle_Ch",
+				[
+					"ShowScreenChangeInfoPopup",
+					true
+				],
+				null
+			],
+			[
+				1939383.0,
+				"_fC_OnConfirmationToggle_Ch",
+				[
+					"ShowScreenApplyConfirmPopup",
+					true
+				],
+				null
+			],
+			[
+				1939680.0,
+				"_fC_OnConfirmationToggle_Ch",
+				[
+					"ShowLoggerRestartInfoPopup",
+					true
+				],
+				null
+			],
+			[
+				1940145.0,
+				"_fC_OnLoggerLimitToggled_Ch",
+				[
+					"LogMaxSizeEnabled",
+					false
+				],
+				null
+			],
+			[
+				1947261.0,
+				"_fC_RebuildLanguageList_Ch",
+				[
+					"",
+					[
+						"ru",
+						"en",
+						"de",
+						"fr",
+						"es"
+					]
+				],
+				null
+			],
+			[
+				1949425.0,
+				"_ready: Interface check passed",
+				[],
+				null
+			],
+			[
+				4017913.0,
+				"AccountPicker: выбран mzs7",
+				[],
+				null
+			],
+			[
+				998377,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		]
+	}
+}

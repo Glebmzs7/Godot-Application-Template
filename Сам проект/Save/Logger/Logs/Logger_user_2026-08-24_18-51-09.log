@@ -1,0 +1,119 @@
+{
+	"Streams": {
+		"0": [
+			[
+				1261876.0,
+				"Stream created: System",
+				[],
+				null
+			],
+			[
+				1279751,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				1263221.0,
+				"Stream created: StartProgram",
+				[],
+				null
+			],
+			[
+				1271036.0,
+				"_ready: Logger check passed",
+				[],
+				null
+			],
+			[
+				1329563.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"MusicVolume",
+					82.0
+				],
+				null
+			],
+			[
+				1329579.0,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"InterfaceVolume",
+					68.0
+				],
+				null
+			],
+			[
+				1329808.0,
+				"_fC_RebuildLanguageList_Ch",
+				[
+					"",
+					[
+						"ru",
+						"en",
+						"de",
+						"fr",
+						"es"
+					]
+				],
+				null
+			],
+			[
+				1331481.0,
+				"_ready: Interface check passed",
+				[],
+				null
+			],
+			[
+				3658424.0,
+				"AccountPicker: выбран Пользователь1",
+				[],
+				null
+			],
+			[
+				3658467.0,
+				"_fC_StartClientConnection_Ch: подключаемся",
+				[
+					"ws://127.0.0.1:9050",
+					"user1"
+				],
+				null
+			],
+			[
+				18974121.0,
+				"_fC_OnServerConnected_Ch: подключено",
+				[],
+				null
+			],
+			[
+				25774406.0,
+				"_fC_OnRetryConnectionPressed_Ch: повторная попытка подключения",
+				[],
+				null
+			],
+			[
+				25774602.0,
+				"_fC_StartClientConnection_Ch: подключаемся",
+				[
+					"ws://127.0.0.1:9050",
+					"user1"
+				],
+				null
+			],
+			[
+				26923820.0,
+				"_fC_OnServerConnected_Ch: подключено",
+				[],
+				null
+			],
+			[
+				28507548.0,
+				"Stream finished: StartProgram",
+				[],
+				null
+			]
+		]
+	}
+}

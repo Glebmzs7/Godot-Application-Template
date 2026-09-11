@@ -1,0 +1,32 @@
+{
+	"Streams": {
+		"0": [
+			[
+				2124038.0,
+				"Stream created: System",
+				[],
+				null
+			],
+			[
+				1447738,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				2124920.0,
+				"Stream created: StartProgram",
+				[],
+				null
+			],
+			[
+				1447752,
+				"Stream was not finished properly — appended on next startup",
+				[],
+				null
+			]
+		]
+	}
+}

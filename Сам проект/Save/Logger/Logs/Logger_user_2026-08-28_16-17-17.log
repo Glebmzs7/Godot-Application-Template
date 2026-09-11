@@ -1,0 +1,92 @@
+{
+	"Streams": {
+		"0": [
+			[
+				1225732,
+				"Stream created: System",
+				[],
+				null
+			]
+		],
+		"1": [
+			[
+				1234358,
+				"Stream created: StartProgram",
+				[],
+				null
+			],
+			[
+				1240570,
+				"_ready: Logger check passed",
+				[],
+				null
+			],
+			[
+				1298604,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"MusicVolume",
+					82
+				],
+				null
+			],
+			[
+				1298623,
+				"_fC_OnSoundSliderChanged_Ch",
+				[
+					"InterfaceVolume",
+					68
+				],
+				null
+			],
+			[
+				1298897,
+				"_fC_RebuildLanguageList_Ch",
+				[
+					"",
+					[
+						"ru",
+						"en",
+						"de",
+						"fr",
+						"es"
+					]
+				],
+				null
+			],
+			[
+				1301269,
+				"_ready: Interface check passed",
+				[],
+				null
+			],
+			[
+				4697793,
+				"AccountPicker: выбран Пользователь1",
+				[],
+				null
+			],
+			[
+				4698470,
+				"_fC_StartClientConnection_Ch: подключаемся",
+				[
+					"ws://127.0.0.1:9050",
+					"user1"
+				],
+				null
+			],
+			[
+				16963658,
+				"_fC_OnServerConnected_Ch: подключено",
+				[],
+				null
+			],
+			[
+				35963519,
+				"Stream finished: StartProgram",
+				[],
+				null
+			]
+		]
+	}
+}
