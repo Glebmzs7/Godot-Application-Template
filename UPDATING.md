@@ -1,55 +1,68 @@
 # Как обновить общий код шаблона в проекте-потребителе
 
-Эта папка (`Class/`) приходит в проект как `git subtree` из репозитория `Godot_Template`
-(remote `godot-template`, ветка `template-class-export` — это ветка-срез, которая содержит
-только содержимое папки `Class/` шаблона на верхнем уровне).
+Эта папка (`Godot_Template/`) приходит в проект как `git subtree` из репозитория `Godot_Template`
+(remote `godot-template`). Полную политику веток (что такое `Стабильные`/`Бета`/`alpha/*`) см. в
+`BRANCHES.md` в корне репозитория шаблона — здесь только команды для потребителя.
 
 ⚠️ **`git subtree split` не работает** для этого репозитория — падает с
-`fatal: assertion failed` из-за известного бага git-subtree с пробелом в пути (`Сам проект/Class`).
-Вместо него ветка-срез обновляется вручную через plumbing-команды (см. «Обновление общего
-кода» ниже) — результат тот же (ветка с содержимым `Class/` в корне), просто без самого
-скрипта `subtree split`.
+`fatal: assertion failed` из-за известного бага git-subtree с пробелом в пути
+(`Сам проект/Godot_Template`). Вместо него ветки-срезы (`export/*`) обновляются вручную через
+plumbing-команды (см. «Обновление общего кода» ниже).
 
 ## Разовая настройка (уже сделана в этом проекте)
 
 ```bash
 git remote add godot-template <путь-или-URL-к-Godot_Template>
-git fetch godot-template template-class-export
-git subtree add --prefix=Class godot-template template-class-export --squash
+git fetch godot-template export/Стабильные
+git subtree add --prefix=Godot_Template godot-template export/Стабильные --squash
 ```
 
-## Обновление общего кода
+## Обновление общего кода (подтянуть новое из шаблона)
 
-Когда в шаблоне появились изменения или новые файлы в `Class/`:
+По умолчанию тянем `export/Стабильные` — то, что уже прошло обкатку в `Бета`. Если нужен ранний
+доступ к тому, что ещё обкатывается — `export/Бета` вместо `export/Стабильные` везде ниже.
 
-1. В `Godot_Template`: внести правки, закоммитить как обычно на `master`, затем обновить
-   ветку-срез вручную (`git subtree split` не работает, см. предупреждение выше):
-   ```bash
-   TREE=$(git rev-parse "HEAD:Сам проект/Class")
-   NEWCOMMIT=$(git commit-tree "$TREE" -m "Class/ из Godot_Template" -p template-class-export)
-   git branch -f template-class-export "$NEWCOMMIT"
-   ```
-   (`-p template-class-export` делает срез настоящей историей с предком — не обязательно, но
-   удобно для `git log`/`blame`; без него тоже сработает, `subtree pull` на squash-режиме не
-   заглядывает в родителей).
-2. В проекте-потребителе (этот проект, или любой другой, подключённый так же):
-   ```bash
-   git fetch godot-template template-class-export
-   git subtree pull --prefix=Class godot-template template-class-export --squash
-   ```
+```bash
+git fetch godot-template export/Стабильные
+git subtree pull --prefix=Godot_Template godot-template export/Стабильные --squash
+```
 
-Новый файл, добавленный в `Class/` шаблона, подхватывается тем же `subtree pull` — отдельных
-шагов не требует.
+Новый файл, добавленный в `Godot_Template/` шаблона, подхватывается тем же `subtree pull` —
+отдельных шагов не требует.
+
+(Для того, кто ведёт сам шаблон: обновить `export/Стабильные`/`export/Бета` после правок на
+соответствующей полной ветке — вручную, `subtree split` не работает:
+```bash
+TREE=$(git rev-parse "Стабильные:Сам проект/Godot_Template")
+NEWCOMMIT=$(git commit-tree "$TREE" -m "Godot_Template/ из ветки Стабильные" -p export/Стабильные)
+git branch -f export/Стабильные "$NEWCOMMIT"
+git push origin export/Стабильные --force
+```
+то же самое для `Бета`/`export/Бета`.)
+
+## Отправить правки обратно в шаблон
+
+Если, работая в этом проекте, вы поправили что-то прямо внутри `Godot_Template/` (например,
+починили баг в общем коде) — это не должно просто остаться только здесь. Отправьте изменения в
+приёмную ветку этого проекта в репозитории шаблона:
+
+```bash
+git subtree push --prefix=Godot_Template godot-template <ИмяЭтогоПроекта>
+```
+
+`<ИмяЭтогоПроекта>` — `Life_Operator` или `Power_struggle`, приёмная ветка того же имени в
+репозитории `Godot_Template`. Дальше это на усмотрение того, кто ведёт шаблон: посмотреть,
+вручную влить удачное в `Бета` (а оттуда со временем в `Стабильные`) — не автоматика.
 
 ## Если нужно править общий код прямо здесь
 
 Можно — subtree это обычные файлы, `git` не запрещает их менять. При следующем `subtree pull`
 могут возникнуть обычные конфликты слияния для изменённых файлов — разрешаются как любой
-`git merge`. Если правка нужна ВСЕМ проектам — лучше сначала внести её в `Godot_Template` и
-подтянуть сюда через `subtree pull`, а не наоборот.
+`git merge`. См. также «Отправить правки обратно» выше — если правка нужна ВСЕМ проектам,
+отправьте её в шаблон, а не держите только локально.
 
-## Что НЕ входит в `Class/` (специфично для конкретного проекта)
+## Что НЕ входит в `Godot_Template/` (специфично для конкретного проекта)
 
 Код, который нужен только этому проекту (игровая логика Power_struggle, экраны Life_Operator и
-т.п.), не должен жить в `Class/` — иначе он потеряется/будет мешать при следующем `subtree pull`.
-Держите его в соседней папке (например `GameClass/` в Power_struggle).
+т.п.), не должен жить в `Godot_Template/` — иначе он потеряется/будет мешать при следующем
+`subtree pull`. Держите его в соседней папке (например `GameClass/` в Power_struggle).
