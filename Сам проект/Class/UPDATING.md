@@ -2,7 +2,13 @@
 
 Эта папка (`Class/`) приходит в проект как `git subtree` из репозитория `Godot_Template`
 (remote `godot-template`, ветка `template-class-export` — это ветка-срез, которая содержит
-только историю папки `Class/` шаблона, полученная через `git subtree split --prefix=Class`).
+только содержимое папки `Class/` шаблона на верхнем уровне).
+
+⚠️ **`git subtree split` не работает** для этого репозитория — падает с
+`fatal: assertion failed` из-за известного бага git-subtree с пробелом в пути (`Сам проект/Class`).
+Вместо него ветка-срез обновляется вручную через plumbing-команды (см. «Обновление общего
+кода» ниже) — результат тот же (ветка с содержимым `Class/` в корне), просто без самого
+скрипта `subtree split`.
 
 ## Разовая настройка (уже сделана в этом проекте)
 
@@ -17,12 +23,15 @@ git subtree add --prefix=Class godot-template template-class-export --squash
 Когда в шаблоне появились изменения или новые файлы в `Class/`:
 
 1. В `Godot_Template`: внести правки, закоммитить как обычно на `master`, затем обновить
-   ветку-срез:
+   ветку-срез вручную (`git subtree split` не работает, см. предупреждение выше):
    ```bash
-   git subtree split --prefix=Class -b template-class-export-new
-   git branch -f template-class-export template-class-export-new
-   git branch -d template-class-export-new
+   TREE=$(git rev-parse "HEAD:Сам проект/Class")
+   NEWCOMMIT=$(git commit-tree "$TREE" -m "Class/ из Godot_Template" -p template-class-export)
+   git branch -f template-class-export "$NEWCOMMIT"
    ```
+   (`-p template-class-export` делает срез настоящей историей с предком — не обязательно, но
+   удобно для `git log`/`blame`; без него тоже сработает, `subtree pull` на squash-режиме не
+   заглядывает в родителей).
 2. В проекте-потребителе (этот проект, или любой другой, подключённый так же):
    ```bash
    git fetch godot-template template-class-export
