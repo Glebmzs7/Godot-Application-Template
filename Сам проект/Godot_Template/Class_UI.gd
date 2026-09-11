@@ -114,8 +114,8 @@
 extends Node
 class_name Class_UI
 
-var Class_ArrDict = load("res://Class/Class_ArrayAndOrDictionary.gd").new()
-var Class_Logger = load("res://Class/Class_Logger.gd").new()
+var Class_ArrDict = load("res://Godot_Template/Class_ArrayAndOrDictionary.gd").new()
+var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 
 #Функционал:
 #	Создание и вставка узла в сцену по конфигурации

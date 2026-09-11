@@ -63,7 +63,7 @@ class_name Class_InternetServer
 ## Собственный UserID сервера при отправке сообщений
 const SERVER_SELF_USERID_S := "Server"
 
-var _vGL_Json_L = load("res://Class/Class_Json.gd").new()
+var _vGL_Json_L = load("res://Godot_Template/Class_Json.gd").new()
 const FileUsers_S := "res://Save/Server/Users.json"
 
 var _vGL_TcpServer: TCPServer = null

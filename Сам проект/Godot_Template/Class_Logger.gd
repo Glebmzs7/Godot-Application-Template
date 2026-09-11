@@ -44,8 +44,8 @@ class_name Class_Logger
 ##	ReplayReader — незаконченная заглушка), настройки для неё уже есть в
 ##	Settings.json, но подключать их сейчас нечему; попросили именно "логи"
 
-var Class_Help = load("res://Class/Class_Help.gd").new()
-var Class_Json = load("res://Class/Class_Json.gd").new()
+var Class_Help = load("res://Godot_Template/Class_Help.gd").new()
+var Class_Json = load("res://Godot_Template/Class_Json.gd").new()
 
 ## Папка, где лежат файлы логов текущей и прошлых сессий (только они — не реестр и не реплеи)
 var FolderLogger := "res://Save/Logger/Logs/"

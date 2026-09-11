@@ -19,7 +19,7 @@ extends Node
 ## УДАЛЁННЫЕ файлы ("Missing" в ответе) — раньше проверялось только "что
 ## прислано, совпадает" и "лишнего нет", но не "ничего не пропало" (см. её
 ## собственный changelog ниже)
-var Class_InternetServer = load("res://Class/Class_InternetServer.gd").new()
+var Class_InternetServer = load("res://Godot_Template/Class_InternetServer.gd").new()
 
 ## Тот же порт и адрес, что использует клиент (см. Start_Program.gd →
 ## SERVER_ADDRESS_S) — для локальной проверки на одном устройстве двумя
@@ -35,7 +35,7 @@ const SERVER_PORT_I := 9050
 ## что и у APP_VERSION_S
 const SERVER_LATEST_VERSION_S := "0.1.0.0"
 
-var _vGL_Json = load("res://Class/Class_Json.gd").new()
+var _vGL_Json = load("res://Godot_Template/Class_Json.gd").new()
 
 ## Manifest файлов для проверки "ThirdPartyFiles" — {Путь: {"Size","FirstByte",
 ## "LastByte"}}, см. Class_FileIntegrity.fC_BuildManifestEntry_Cr. Отдельная

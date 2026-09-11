@@ -58,10 +58,10 @@
 extends Node
 class_name Class_ArrayAndOrDictionary
 
-var Class_Help = load("res://Class/Class_Help.gd").new()
+var Class_Help = load("res://Godot_Template/Class_Help.gd").new()
 ## Собственный логгер этого класса — все функции ниже, участвующие в графе вызовов
 ## fC_ComparisonsOf2Variables_0101, пишут именно сюда (см. _vC_ActiveStreamId)
-var Class_Logger = load("res://Class/Class_Logger.gd").new()
+var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 
 ## Id потока, в который сейчас нужно логировать (пустая строка = логирование выключено).
 ## Выставляется СНАРУЖИ (например, test.gd) перед вызовом fC_ComparisonsOf2Variables_0101 —

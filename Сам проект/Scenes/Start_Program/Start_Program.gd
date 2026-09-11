@@ -711,10 +711,10 @@ extends Node
 ##	   _fC_SaveSettings_Ch (дважды подряд, без эффекта, но лишний) в
 ##	   _fC_OnLoggerLimitSubmitted_Ch
 
-var Class_Logger = load("res://Class/Class_Logger.gd").new()
-var Class_UI = load("res://Class/Class_UI.gd").new()
-var Class_Json = load("res://Class/Class_Json.gd").new()
-var Class_Localization = load("res://Class/Class_Localization.gd").new()
+var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
+var Class_UI = load("res://Godot_Template/Class_UI.gd").new()
+var Class_Json = load("res://Godot_Template/Class_Json.gd").new()
+var Class_Localization = load("res://Godot_Template/Class_Localization.gd").new()
 
 ## Id потока, зарегистрированного для этой сцены — нужен, чтобы корректно
 ## завершить его перед переходом на следующий экран
@@ -925,7 +925,7 @@ var vLS_SelectedAccount_S := ""
 ## проверки — см. _fC_OnServerConnected_Ch/_fC_OnClientAppOpReceived_Ch ниже и
 ## AppOpReceived_S (см. changelog Class_Internet.gd) — раньше обе сразу
 ## отмечались пройденными вместе с "Server", без реальной проверки
-var Class_InternetClient = load("res://Class/Class_InternetClient.gd").new()
+var Class_InternetClient = load("res://Godot_Template/Class_InternetClient.gd").new()
 
 ## Тот же адрес/порт, что слушает сервер в test.gd (SERVER_PORT_I) — для
 ## локальной проверки клиент+сервер на одном устройстве двумя экземплярами
