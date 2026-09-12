@@ -1,7 +1,7 @@
 # Как обновить общий код шаблона в проекте-потребителе
 
 Эта папка (`Godot_Template/`) приходит в проект как `git subtree` из репозитория `Godot_Template`
-(remote `godot-template`). Полную политику веток (что такое `Стабильные`/`Бета`/`alpha/*`) см. в
+(remote `godot-template`). Полную политику веток (что такое `Stable`/`Beta`/`alpha/*`) см. в
 `BRANCHES.md` в корне репозитория шаблона — здесь только команды для потребителя.
 
 ⚠️ **`git subtree split` и `git subtree push` не работают, если путь до папки у вас содержит
@@ -16,32 +16,32 @@ plumbing-команды (см. «Отправить правки обратно�
 
 ```bash
 git remote add godot-template <путь-или-URL-к-Godot_Template>
-git fetch godot-template export/Стабильные
-git subtree add --prefix=Godot_Template godot-template export/Стабильные --squash
+git fetch godot-template export/Stable
+git subtree add --prefix=Godot_Template godot-template export/Stable --squash
 ```
 
 ## Обновление общего кода (подтянуть новое из шаблона)
 
-По умолчанию тянем `export/Стабильные` — то, что уже прошло обкатку в `Бета`. Если нужен ранний
-доступ к тому, что ещё обкатывается — `export/Бета` вместо `export/Стабильные` везде ниже.
+По умолчанию тянем `export/Stable` — то, что уже прошло обкатку в `Beta`. Если нужен ранний
+доступ к тому, что ещё обкатывается — `export/Beta` вместо `export/Stable` везде ниже.
 
 ```bash
-git fetch godot-template export/Стабильные
-git subtree pull --prefix=Godot_Template godot-template export/Стабильные --squash
+git fetch godot-template export/Stable
+git subtree pull --prefix=Godot_Template godot-template export/Stable --squash
 ```
 
 Новый файл, добавленный в `Godot_Template/` шаблона, подхватывается тем же `subtree pull` —
 отдельных шагов не требует.
 
-(Для того, кто ведёт сам шаблон: обновить `export/Стабильные`/`export/Бета` после правок на
+(Для того, кто ведёт сам шаблон: обновить `export/Stable`/`export/Beta` после правок на
 соответствующей полной ветке — вручную, `subtree split` не работает:
 ```bash
-TREE=$(git rev-parse "Стабильные:Сам проект/Godot_Template")
-NEWCOMMIT=$(git commit-tree "$TREE" -m "Godot_Template/ из ветки Стабильные" -p export/Стабильные)
-git branch -f export/Стабильные "$NEWCOMMIT"
-git push origin export/Стабильные --force
+TREE=$(git rev-parse "Stable:Сам проект/Godot_Template")
+NEWCOMMIT=$(git commit-tree "$TREE" -m "Godot_Template/ из ветки Stable" -p export/Stable)
+git branch -f export/Stable "$NEWCOMMIT"
+git push origin export/Stable --force
 ```
-то же самое для `Бета`/`export/Бета`.)
+то же самое для `Beta`/`export/Beta`.)
 
 ## Отправить правки обратно в шаблон
 
@@ -65,7 +65,7 @@ git push godot-template "$NEWCOMMIT":<ИмяЭтогоПроекта>
 
 `<ИмяЭтогоПроекта>` — `Life_Operator` или `Power_struggle`, приёмная ветка того же имени в
 репозитории `Godot_Template`. Дальше это на усмотрение того, кто ведёт шаблон: посмотреть,
-вручную влить удачное в `Бета` (а оттуда со временем в `Стабильные`) — не автоматика.
+вручную влить удачное в `Beta` (а оттуда со временем в `Stable`) — не автоматика.
 
 ## Если нужно править общий код прямо здесь
 
