@@ -21,7 +21,7 @@ config/icon="res://Textures/icon.svg"
 
 [autoload]
 
-Analytics="*uid://b6yfippsnm3v4"
+Logger="*res://Godot_Template/Class_Logger.gd"
 
 [display]
 

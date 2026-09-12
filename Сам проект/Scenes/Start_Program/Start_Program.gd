@@ -711,7 +711,6 @@ extends Node
 ##	   _fC_SaveSettings_Ch (дважды подряд, без эффекта, но лишний) в
 ##	   _fC_OnLoggerLimitSubmitted_Ch
 
-var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 var Class_UI = load("res://Godot_Template/Class_UI.gd").new()
 var Class_Json = load("res://Godot_Template/Class_Json.gd").new()
 var Class_Localization = load("res://Godot_Template/Class_Localization.gd").new()
@@ -1027,16 +1026,16 @@ func _ready() -> void:
 			int(vXD_Settings_D.get("ScreenHeight", vSV2_Scene_size_V2i.y))
 		)
 
-	Class_Logger.fxG_StartingLogger_CrTr()
-	vLS_StreamId = Class_Logger.fC_RegisterStream_Cr("StartProgram")
+	Logger.fxG_StartingLogger_CrTr()
+	vLS_StreamId = Logger.fC_RegisterStream_Cr("StartProgram")
 
 	# Шаг 1: логгер — интерфейс ещё не существует, честную проверку делаем "вслепую"
-	var vLB_LoggerOk: bool = Class_Logger.FileLogger != "" and FileAccess.file_exists(Class_Logger.FileLogger)
+	var vLB_LoggerOk: bool = Logger.FileLogger != "" and FileAccess.file_exists(Logger.FileLogger)
 	if not vLB_LoggerOk:
 		_fC_FatalStartupError_Ch("Логгер", "Не удалось запустить логгер — файл лога не создан.")
 		return
 	vLD_CheckStatuses_D["Logger"] = "passed"
-	Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_ready: Logger check passed", [], null)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_ready: Logger check passed", [], null)
 
 	# Шаг 2: интерфейс — сама попытка построить экран и есть эта проверка.
 	# Статус "checking" выставляем ДО сборки, чтобы строка чек-листа сразу
@@ -1048,7 +1047,7 @@ func _ready() -> void:
 		_fC_FatalStartupError_Ch("Интерфейс", "Не все элементы экрана удалось создать.")
 		return
 	fC_SetCheckStatus_Ch("Interface", "passed")
-	Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_ready: Interface check passed", [], null)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_ready: Interface check passed", [], null)
 
 	# 2026-08-23: проверка "Server" начинается с выбора аккаунта — см.
 	# _fC_ShowAccountPicker_Ch. Update/ThirdPartyFiles по-прежнему не
@@ -1430,7 +1429,7 @@ func _fC_RescaleFonts_Ch() -> void:
 		_fC_RebuildLanguageList_Ch(vSD_AllNodes_D["LanguageSearchLineEdit"]["Node"].text)
 
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_RescaleFonts_Ch", [vLD_FontUpdates_D.size()], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_RescaleFonts_Ch", [vLD_FontUpdates_D.size()], null)
 
 
 #Функционал:
@@ -3332,10 +3331,10 @@ func _fC_BuildScreen_Ch() -> void:
 func fC_SwitchOrientation_Ch(vLS_NewOrientation_S: String) -> void:
 	if vLS_NewOrientation_S == vLS_Orientation_S:
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SwitchOrientation_Ch: already this orientation, ignored", [vLS_NewOrientation_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SwitchOrientation_Ch: already this orientation, ignored", [vLS_NewOrientation_S], null)
 		return
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SwitchOrientation_Ch: switching", [vLS_Orientation_S, vLS_NewOrientation_S], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SwitchOrientation_Ch: switching", [vLS_Orientation_S, vLS_NewOrientation_S], null)
 	var vXD_NewConfig_D: Dictionary = _fC_BuildScreenConfig_Cr(vLS_NewOrientation_S)
 	Class_UI.fC_SyncNodesWithConfig_Ch(vSD_AllNodes_D, vXD_CurrentScreenConfig_D, vXD_NewConfig_D)
 	vXD_CurrentScreenConfig_D = vXD_NewConfig_D
@@ -3390,10 +3389,10 @@ func _fC_FatalStartupError_Ch(vLS_Component_S: String, vLS_Detail_S: String) -> 
 	push_error("⛔ " + vLS_Text)
 
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "Fatal startup error: " + vLS_Component_S, [vLS_Detail_S], "push_error")
-		Class_Logger.fC_FinishStream_Ch(vLS_StreamId)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "Fatal startup error: " + vLS_Component_S, [vLS_Detail_S], "push_error")
+		Logger.fC_FinishStream_Ch(vLS_StreamId)
 		# Форсируем сброс на диск — дальше сразу quit(), обычного автосброса можно не дождаться
-		Class_Logger.fC_Saving_Logs_Ch()
+		Logger.fC_Saving_Logs_Ch()
 
 	OS.alert(vLS_Text, "Ошибка запуска")
 	get_tree().quit()
@@ -3412,7 +3411,7 @@ func _fC_FatalStartupError_Ch(vLS_Component_S: String, vLS_Detail_S: String) -> 
 #		vLS_Detail_S: String — подробность проблемы
 func _fC_ReportError_Ch(vLS_Component_S: String, vLS_Detail_S: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "Non-fatal error: " + vLS_Component_S, [vLS_Detail_S], "error")
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "Non-fatal error: " + vLS_Component_S, [vLS_Detail_S], "error")
 	_fC_ShowInfo_Ch("%s: %s" % [vLS_Component_S, vLS_Detail_S])
 
 
@@ -3488,7 +3487,7 @@ func _fC_OnAccountOptionPressed_Ch(vLS_Account_S: String) -> void:
 	if vSD_AllNodes_D.has("InfoBoxLabel"):
 		vSD_AllNodes_D["InfoBoxLabel"]["Node"].visible = true
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: выбран " + vLS_Account_S, [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: выбран " + vLS_Account_S, [], null)
 	_fC_RunServerCheck_Ch()
 
 
@@ -3540,7 +3539,7 @@ func _fC_StartClientConnection_Ch() -> void:
 	_vLF_ServerConnectAttemptStartedAtMsec_F = Time.get_ticks_msec()
 
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_StartClientConnection_Ch: подключаемся", [SERVER_ADDRESS_S, Class_InternetClient.vGS_UserID_S], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_StartClientConnection_Ch: подключаемся", [SERVER_ADDRESS_S, Class_InternetClient.vGS_UserID_S], null)
 
 	var vLB_Started_Bv: bool = Class_InternetClient.fxG_EstablishingConnection_CrTr(SERVER_ADDRESS_S)
 	if not vLB_Started_Bv:
@@ -3627,7 +3626,7 @@ func _fC_OnServerConnected_Ch() -> void:
 	if vSD_AllNodes_D.has("InfoBoxConnectingLabel"):
 		vSD_AllNodes_D["InfoBoxConnectingLabel"]["Node"].visible = false
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnServerConnected_Ch: подключено", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnServerConnected_Ch: подключено", [], null)
 	fC_SetCheckStatus_Ch("Server", "passed")
 	fC_SetCheckStatus_Ch("Update", "checking")
 	fC_SetCheckStatus_Ch("ThirdPartyFiles", "checking")
@@ -3738,12 +3737,12 @@ func _fC_HandleRegisterResult_Ch(vLD_ReplyEnvelope_D: Dictionary) -> void:
 
 	if bool(vLD_Messages_D.get("Ok", false)):
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_HandleRegisterResult_Ch: аккаунт создан на сервере, входим", [vLS_SelectedAccount_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_HandleRegisterResult_Ch: аккаунт создан на сервере, входим", [vLS_SelectedAccount_S], null)
 		return
 
 	var vLS_Error_S: String = String(vLD_Messages_D.get("Error", "Не удалось зарегистрироваться."))
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_HandleRegisterResult_Ch: отказ сервера", [vLS_Error_S], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_HandleRegisterResult_Ch: отказ сервера", [vLS_Error_S], null)
 
 	if vSD_AllNodes_D.has("InfoBoxConnectingLabel"):
 		vSD_AllNodes_D["InfoBoxConnectingLabel"]["Node"].visible = false
@@ -3824,10 +3823,10 @@ func _fC_OnRetryConnectionPressed_Ch() -> void:
 		vSD_AllNodes_D["InfoBoxAutonomousButton"]["Node"].visible = false
 	if Class_InternetClient.vGE_State == Class_InternetClient.ConnectionState.CONNECTED:
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnRetryConnectionPressed_Ch: уже подключены, повтор не нужен", [], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnRetryConnectionPressed_Ch: уже подключены, повтор не нужен", [], null)
 		return
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnRetryConnectionPressed_Ch: повторная попытка подключения", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnRetryConnectionPressed_Ch: повторная попытка подключения", [], null)
 	fC_SetCheckStatus_Ch("Server", "checking")
 	_fC_StartClientConnection_Ch()
 
@@ -3856,7 +3855,7 @@ func _fC_OnAutonomousModePressed_Ch() -> void:
 	_vLB_ServerCheckResolved_Bv = true
 	_vLB_AutonomousMode_Bv = true
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutonomousModePressed_Ch: продолжаем без сервера", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutonomousModePressed_Ch: продолжаем без сервера", [], null)
 	for elLS_Key in AUTONOMOUS_SKIPPED_CHECKS_A:
 		if vLD_CheckStatuses_D.get(elLS_Key, "waiting") != "passed":
 			fC_SetCheckStatus_Ch(elLS_Key, "failed")
@@ -3958,7 +3957,7 @@ func _fC_OnAccountAddSavePressed_Ch() -> void:
 	vLD_AccountsList_D[vLS_Nick_S] = {"ID": vLS_Id_S, "Password": vLS_Password_S}
 	_fC_SaveAccountsList_Ch(vLD_AccountsList_D)
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: добавлен аккаунт " + vLS_Nick_S, [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: добавлен аккаунт " + vLS_Nick_S, [], null)
 
 	_fC_ClearAccountAddForm_Ch()
 	_fC_RefreshScreenAfterDataChange_Ch()
@@ -4007,7 +4006,7 @@ func _fC_OnAccountAddRegisterPressed_Ch() -> void:
 	vLD_AccountsList_D[vLS_Nick_S] = {"ID": vLS_Id_S, "Password": vLS_Password_S}
 	_fC_SaveAccountsList_Ch(vLD_AccountsList_D)
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: регистрация нового аккаунта на сервере " + vLS_Nick_S, [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: регистрация нового аккаунта на сервере " + vLS_Nick_S, [], null)
 
 	_fC_ClearAccountAddForm_Ch()
 	vLS_SelectedAccount_S = vLS_Nick_S
@@ -4064,7 +4063,7 @@ func _fC_ShowAccountPickerMessage_Ch(vLS_Text_S: String) -> void:
 func _fC_OnOAuthButtonPressed_Ch(vLS_Provider_S: String) -> void:
 	_fC_ShowAccountPickerMessage_Ch("Вход через %s ещё не подключён — нужны учётные данные приложения от %s (см. План проекта/OAuth сторонние аккаунты.md)." % [vLS_Provider_S, vLS_Provider_S])
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: нажата заглушка OAuth", [vLS_Provider_S], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "AccountPicker: нажата заглушка OAuth", [vLS_Provider_S], null)
 
 
 #Функционал:
@@ -4127,7 +4126,7 @@ func _fC_UpdateOverallProgress_Ch() -> void:
 #Функционал:
 #	Нажатие "Войти" — завершает поток логов сцены и переключается на Home
 func _fC_OnProceedPressed_Ch() -> void:
-	Class_Logger.fC_FinishStream_Ch(vLS_StreamId)
+	Logger.fC_FinishStream_Ch(vLS_StreamId)
 	Class_UI.fxC_SceneSwitching("res://Scenes/UIScenes/Home/Home.tscn")
 
 
@@ -4176,7 +4175,7 @@ func _fC_ToggleModal_Ch(vLS_Source: String) -> void:
 #		vLS_Source: String — "Support" или "Settings"
 func _fC_OpenModal_Ch(vLS_Source: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OpenModal_Ch", [vLS_Source], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OpenModal_Ch", [vLS_Source], null)
 	if vSD_AllNodes_D.has("ModalWindowLabel"):
 		vSD_AllNodes_D["ModalWindowLabel"]["Node"].text = "SUPPORT_TITLE" if vLS_Source == "Support" else "SETTINGS_TITLE"
 	if vSD_AllNodes_D.has("SettingsCategoriesScroll"):
@@ -4227,7 +4226,7 @@ func _fC_CloseModal_Ch() -> void:
 			_fC_ApplyScreenSize_Ch(vLI_PendingScreenWidth_I, vLI_PendingScreenHeight_I, vLB_PendingFullscreen_Bv)
 
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_CloseModal_Ch", [vLS_ModalSource_S], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_CloseModal_Ch", [vLS_ModalSource_S], null)
 	vSD_AllNodes_D["ModalOverlay"]["Node"].visible = false
 	vLB_ModalOpen_Bv = false
 	vLS_ModalSource_S = ""
@@ -4351,7 +4350,7 @@ func _fC_OnSettingsCategoryToggled_Ch(vLB_Pressed: bool, vLS_Category: String) -
 	if not vLB_Pressed:
 		return
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnSettingsCategoryToggled_Ch", [vLS_Category], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnSettingsCategoryToggled_Ch", [vLS_Category], null)
 	vLS_ActiveSettingsCategory_S = vLS_Category
 	_fC_UpdateModalContentVisibility_Ch()
 
@@ -4387,7 +4386,7 @@ func _fC_RebuildLanguageList_Ch(vLS_Query_S: String) -> void:
 	var vLS_CurrentLocale_S: String = vXD_Settings_D.get("Locale", "")
 	var vLA_Matches_A: Array = Class_Localization.fC_FilterLocalesByInputScript_A(vLS_Query_S)
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_RebuildLanguageList_Ch", [vLS_Query_S, vLA_Matches_A.duplicate()], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_RebuildLanguageList_Ch", [vLS_Query_S, vLA_Matches_A.duplicate()], null)
 
 	for elLS_Locale in vLA_Matches_A:
 		var vL_Button := Button.new()
@@ -4421,7 +4420,7 @@ func _fC_OnLanguageSearchChanged_Ch(vLS_NewText_S: String) -> void:
 #		vLS_Locale: String — код локали ("ru"/"en"/...), привязан через .bind()
 func _fC_OnLanguageOptionPressed_Ch(vLS_Locale: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLanguageOptionPressed_Ch", [vLS_Locale], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLanguageOptionPressed_Ch", [vLS_Locale], null)
 	Class_Localization.fC_SetLocale_Ch(vLS_Locale)
 	vXD_Settings_D["Locale"] = vLS_Locale
 	_fC_SaveSettings_Ch(vXD_Settings_D)
@@ -4450,14 +4449,14 @@ func _fC_OnScreenSizeChanged_Ch(vLS_SubmittedText_S: String) -> void:
 	var vLS_HeightText_S: String = vSD_AllNodes_D["ScreenHeightLineEdit"]["Node"].text.strip_edges()
 	if not vLS_WidthText_S.is_valid_int() or not vLS_HeightText_S.is_valid_int():
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenSizeChanged_Ch: invalid input, ignored", [vLS_WidthText_S, vLS_HeightText_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenSizeChanged_Ch: invalid input, ignored", [vLS_WidthText_S, vLS_HeightText_S], null)
 		return
 
 	var vLI_Width_I: int = vLS_WidthText_S.to_int()
 	var vLI_Height_I: int = vLS_HeightText_S.to_int()
 	if vLI_Width_I <= 0 or vLI_Height_I <= 0:
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenSizeChanged_Ch: non-positive size, ignored", [vLI_Width_I, vLI_Height_I], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenSizeChanged_Ch: non-positive size, ignored", [vLI_Width_I, vLI_Height_I], null)
 		return
 	_fC_QueueScreenSizeChange_Ch(vLI_Width_I, vLI_Height_I)
 
@@ -4480,13 +4479,13 @@ func _fC_OnFontScaleSubmitted_Ch(vLS_SubmittedText_S: String) -> void:
 	var vLS_Text_S: String = vSD_AllNodes_D["ScreenFontScaleLineEdit"]["Node"].text.strip_edges()
 	if not vLS_Text_S.is_valid_float():
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnFontScaleSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnFontScaleSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
 		return
 	# 0.5..3.0 — страховка от нечитаемо мелкого/чудовищно огромного текста
 	# при случайной опечатке (например "10" вместо "1.0")
 	var vLF_Value_F: float = clamp(vLS_Text_S.to_float(), 0.5, 3.0)
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnFontScaleSubmitted_Ch", [vLF_Value_F], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnFontScaleSubmitted_Ch", [vLF_Value_F], null)
 	vXD_Settings_D["FontScale"] = vLF_Value_F
 	vSD_AllNodes_D["ScreenFontScaleLineEdit"]["Node"].text = "%.2f" % vLF_Value_F
 	_fC_SaveSettings_Ch(vXD_Settings_D)
@@ -4506,7 +4505,7 @@ func _fC_OnScreenPresetPressed_Ch(vLI_Width_I: int, vLI_Height_I: int) -> void:
 	if vSD_AllNodes_D.has("ScreenHeightLineEdit"):
 		vSD_AllNodes_D["ScreenHeightLineEdit"]["Node"].text = str(vLI_Height_I)
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenPresetPressed_Ch: preset chosen", [vLI_Width_I, vLI_Height_I], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenPresetPressed_Ch: preset chosen", [vLI_Width_I, vLI_Height_I], null)
 	_fC_QueueScreenSizeChange_Ch(vLI_Width_I, vLI_Height_I)
 
 
@@ -4528,7 +4527,7 @@ func _fC_OnScreenPresetPressed_Ch(vLI_Width_I: int, vLI_Height_I: int) -> void:
 #			привязано через .bind() на каждой кнопке-заголовке
 func _fC_OnPresetGroupToggled_Ch(vLB_Pressed: bool, vLS_HBoxKey_S: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnPresetGroupToggled_Ch", [vLS_HBoxKey_S, vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnPresetGroupToggled_Ch", [vLS_HBoxKey_S, vLB_Pressed], null)
 	if vSD_AllNodes_D.has(vLS_HBoxKey_S):
 		vSD_AllNodes_D[vLS_HBoxKey_S]["Node"].visible = vLB_Pressed
 
@@ -4548,7 +4547,7 @@ func _fC_QueueScreenSizeChange_Ch(vLI_Width_I: int, vLI_Height_I: int) -> void:
 	vLI_PendingScreenHeight_I = vLI_Height_I
 	vLB_PendingFullscreen_Bv = false
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_QueueScreenSizeChange_Ch", [vLI_Width_I, vLI_Height_I], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_QueueScreenSizeChange_Ch", [vLI_Width_I, vLI_Height_I], null)
 	_fC_MarkScreenSizeDirty_Ch()
 
 
@@ -4566,7 +4565,7 @@ func _fC_QueueScreenSizeChange_Ch(vLI_Width_I: int, vLI_Height_I: int) -> void:
 func _fC_QueueFullscreenChange_Ch(vLB_Fullscreen_Bv: bool) -> void:
 	vLB_PendingFullscreen_Bv = vLB_Fullscreen_Bv
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_QueueFullscreenChange_Ch", [vLB_Fullscreen_Bv], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_QueueFullscreenChange_Ch", [vLB_Fullscreen_Bv], null)
 	_fC_MarkScreenSizeDirty_Ch()
 
 
@@ -4607,7 +4606,7 @@ func _fC_MarkScreenSizeDirty_Ch() -> void:
 #	протестировать на экспортированной сборке, а не через "Play" в редакторе
 func _fC_ApplyScreenSize_Ch(vLI_Width_I: int, vLI_Height_I: int, vLB_Fullscreen_Bv: bool = false) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_ApplyScreenSize_Ch: applying", [vLI_Width_I, vLI_Height_I, vLB_Fullscreen_Bv], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_ApplyScreenSize_Ch: applying", [vLI_Width_I, vLI_Height_I, vLB_Fullscreen_Bv], null)
 
 	if vLB_Fullscreen_Bv:
 		get_window().mode = Window.MODE_FULLSCREEN
@@ -4647,7 +4646,7 @@ func _fC_ShowScreenInfoPopup_Ch() -> void:
 #	(применение размера происходит отдельно, при закрытии настроек)
 func _fC_OnScreenInfoOkPressed_Ch() -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenInfoOkPressed_Ch", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenInfoOkPressed_Ch", [], null)
 	if vSD_AllNodes_D.has("ScreenInfoPopupOverlay"):
 		vSD_AllNodes_D["ScreenInfoPopupOverlay"]["Node"].visible = false
 
@@ -4661,7 +4660,7 @@ func _fC_OnScreenInfoOkPressed_Ch() -> void:
 #		vLB_Pressed: bool — новое состояние галочки (сигнал toggled)
 func _fC_OnScreenInfoDontShowToggled_Ch(vLB_Pressed: bool) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenInfoDontShowToggled_Ch", [vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenInfoDontShowToggled_Ch", [vLB_Pressed], null)
 	vXD_Settings_D["ShowScreenChangeInfoPopup"] = not vLB_Pressed
 	_fC_SaveSettings_Ch(vXD_Settings_D)
 	_fC_UpdateConfirmToggleVisual_Ch("ConfirmScreenInfoToggle", not vLB_Pressed)
@@ -4744,7 +4743,7 @@ func _fC_OnScreenApplyButtonPressed_Ch() -> void:
 		_vLI_ApplyButtonDodgeCount_I += 1
 		_fC_DodgeApplyButton_Ch()
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyButtonPressed_Ch: too fast, dodged", [_vLI_ApplyButtonDodgeCount_I, vLI_DodgeLimit_I], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyButtonPressed_Ch: too fast, dodged", [_vLI_ApplyButtonDodgeCount_I, vLI_DodgeLimit_I], null)
 		return
 	_fC_CommitScreenSizeChange_Ch()
 
@@ -4772,7 +4771,7 @@ func _fC_DodgeApplyButton_Ch() -> void:
 #	уже false (см. changelog про _fC_CloseModal_Ch)
 func _fC_CommitScreenSizeChange_Ch() -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_CommitScreenSizeChange_Ch", [vLI_PendingScreenWidth_I, vLI_PendingScreenHeight_I, vLB_PendingFullscreen_Bv], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_CommitScreenSizeChange_Ch", [vLI_PendingScreenWidth_I, vLI_PendingScreenHeight_I, vLB_PendingFullscreen_Bv], null)
 	vLB_ScreenSizeDirty_Bv = false
 	_fC_ApplyScreenSize_Ch(vLI_PendingScreenWidth_I, vLI_PendingScreenHeight_I, vLB_PendingFullscreen_Bv)
 	_fC_HideScreenApplyConfirm_Ch()
@@ -4785,7 +4784,7 @@ func _fC_CommitScreenSizeChange_Ch() -> void:
 #	реально применённым (сохранённым) значениям и закрывает настройки без применения
 func _fC_OnScreenApplyCancelPressed_Ch() -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyCancelPressed_Ch", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyCancelPressed_Ch", [], null)
 	vLB_ScreenSizeDirty_Bv = false
 	vLB_PendingFullscreen_Bv = vXD_Settings_D.get("Fullscreen", false)
 	if vSD_AllNodes_D.has("ScreenWidthLineEdit"):
@@ -4806,7 +4805,7 @@ func _fC_OnScreenApplyCancelPressed_Ch() -> void:
 #		vLB_Pressed: bool — новое состояние галочки (сигнал toggled)
 func _fC_OnScreenApplyDontShowToggled_Ch(vLB_Pressed: bool) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyDontShowToggled_Ch", [vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnScreenApplyDontShowToggled_Ch", [vLB_Pressed], null)
 	vXD_Settings_D["ShowScreenApplyConfirmPopup"] = not vLB_Pressed
 	_fC_SaveSettings_Ch(vXD_Settings_D)
 	_fC_UpdateConfirmToggleVisual_Ch("ConfirmScreenApplyToggle", not vLB_Pressed)
@@ -4825,7 +4824,7 @@ func _fC_OnScreenApplyDontShowToggled_Ch(vLB_Pressed: bool) -> void:
 #			привязан через .bind()
 func _fC_OnConfirmationToggle_Ch(vLB_Pressed: bool, vLS_SettingsKey_S: String, vLS_NodeKey_S: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnConfirmationToggle_Ch", [vLS_SettingsKey_S, vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnConfirmationToggle_Ch", [vLS_SettingsKey_S, vLB_Pressed], null)
 	vXD_Settings_D[vLS_SettingsKey_S] = vLB_Pressed
 	_fC_SaveSettings_Ch(vXD_Settings_D)
 	_fC_UpdateConfirmToggleVisual_Ch(vLS_NodeKey_S, vLB_Pressed)
@@ -4885,7 +4884,7 @@ func _fC_OnConfirmSourceToggled_Ch(vLB_Pressed: bool, vLS_Source: String) -> voi
 	if not vLB_Pressed:
 		return
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnConfirmSourceToggled_Ch", [vLS_Source], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnConfirmSourceToggled_Ch", [vLS_Source], null)
 	vLS_ActiveConfirmSource_S = vLS_Source
 	_fC_UpdateConfirmSourceVisibility_Ch()
 
@@ -4919,11 +4918,11 @@ func _fC_OnAutoClickProtectionSubmitted_Ch(vLS_SubmittedText_S: String) -> void:
 	var vLS_Text_S: String = vSD_AllNodes_D["ConfirmAutoClickProtectionLineEdit"]["Node"].text.strip_edges()
 	if not vLS_Text_S.is_valid_float():
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickProtectionSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickProtectionSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
 		return
 	var vLF_Value_F: float = max(0.0, vLS_Text_S.to_float())
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickProtectionSubmitted_Ch", [vLF_Value_F], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickProtectionSubmitted_Ch", [vLF_Value_F], null)
 	vXD_Settings_D["AutoClickProtectionSeconds"] = vLF_Value_F
 	vSD_AllNodes_D["ConfirmAutoClickProtectionLineEdit"]["Node"].text = "%.1f" % vLF_Value_F
 	_fC_SaveSettings_Ch(vXD_Settings_D)
@@ -4946,11 +4945,11 @@ func _fC_OnAutoClickDodgeLimitSubmitted_Ch(vLS_SubmittedText_S: String) -> void:
 	var vLS_Text_S: String = vSD_AllNodes_D["ConfirmAutoClickDodgeLimitLineEdit"]["Node"].text.strip_edges()
 	if not vLS_Text_S.is_valid_int():
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickDodgeLimitSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickDodgeLimitSubmitted_Ch: invalid input, ignored", [vLS_Text_S], null)
 		return
 	var vLI_Value_I: int = max(0, vLS_Text_S.to_int())
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickDodgeLimitSubmitted_Ch", [vLI_Value_I], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnAutoClickDodgeLimitSubmitted_Ch", [vLI_Value_I], null)
 	vXD_Settings_D["AutoClickDodgeLimit"] = vLI_Value_I
 	vSD_AllNodes_D["ConfirmAutoClickDodgeLimitLineEdit"]["Node"].text = "%d" % vLI_Value_I
 	_fC_SaveSettings_Ch(vXD_Settings_D)
@@ -4984,7 +4983,7 @@ func _fC_OnFullscreenToggled_Ch(vLB_Pressed: bool) -> void:
 #			рядом с ползунком, привязан через .bind()
 func _fC_OnSoundSliderChanged_Ch(vLF_Value_F: float, vLS_SettingsKey_S: String, vLS_ValueLabelKey_S: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnSoundSliderChanged_Ch", [vLS_SettingsKey_S, int(vLF_Value_F)], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnSoundSliderChanged_Ch", [vLS_SettingsKey_S, int(vLF_Value_F)], null)
 	vXD_Settings_D[vLS_SettingsKey_S] = int(vLF_Value_F)
 	if vSD_AllNodes_D.has(vLS_ValueLabelKey_S):
 		vSD_AllNodes_D[vLS_ValueLabelKey_S]["Node"].text = "%d%%" % int(vLF_Value_F)
@@ -5005,7 +5004,7 @@ func _fC_OnSoundSliderChanged_Ch(vLF_Value_F: float, vLS_SettingsKey_S: String, 
 #			перекраски, привязан через .bind()
 func _fC_OnLoggerLimitToggled_Ch(vLB_Pressed: bool, vLS_SettingsKey_S: String, vLS_NodeKey_S: String) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitToggled_Ch", [vLS_SettingsKey_S, vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitToggled_Ch", [vLS_SettingsKey_S, vLB_Pressed], null)
 	vXD_Settings_D[vLS_SettingsKey_S] = vLB_Pressed
 	_fC_SaveSettings_Ch(vXD_Settings_D)
 	_fC_UpdateLoggerCheckVisual_Ch(vLS_NodeKey_S, vLB_Pressed)
@@ -5070,7 +5069,7 @@ func _fC_OnLoggerLimitSubmitted_Ch(vLS_SubmittedText_S: String, vLS_SettingsKey_
 	var vLS_Text_S: String = vSD_AllNodes_D[vLS_NodeKey_S]["Node"].text.strip_edges()
 	if not vLS_Text_S.is_valid_int():
 		if vLS_StreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitSubmitted_Ch: invalid input, ignored", [vLS_SettingsKey_S, vLS_Text_S], null)
+			Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitSubmitted_Ch: invalid input, ignored", [vLS_SettingsKey_S, vLS_Text_S], null)
 		# Невалидный ввод — откатываем поле к реально сохранённому значению,
 		# а не оставляем мусор в нём висеть (тот же принцип, что и у полей
 		# ширины/высоты экрана)
@@ -5078,7 +5077,7 @@ func _fC_OnLoggerLimitSubmitted_Ch(vLS_SubmittedText_S: String, vLS_SettingsKey_
 		return
 	var vLI_Value_I: int = max(1, vLS_Text_S.to_int()) # минимум 1 — лимит "0" бессмысленен, для отключения есть галочка
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitSubmitted_Ch", [vLS_SettingsKey_S, vLI_Value_I], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerLimitSubmitted_Ch", [vLS_SettingsKey_S, vLI_Value_I], null)
 	vXD_Settings_D[vLS_SettingsKey_S] = vLI_Value_I
 	vSD_AllNodes_D[vLS_NodeKey_S]["Node"].text = "%d" % vLI_Value_I
 	_fC_SaveSettings_Ch(vXD_Settings_D) # 2026-08-22: убран случайный повторный вызов этой же строки (был дважды подряд, без эффекта)
@@ -5106,7 +5105,7 @@ func _fC_ShowLoggerInfoPopup_Ch() -> void:
 #	моменту показа окна — само окно только предупреждает о СРОКЕ применения)
 func _fC_OnLoggerInfoOkPressed_Ch() -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerInfoOkPressed_Ch", [], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerInfoOkPressed_Ch", [], null)
 	if vSD_AllNodes_D.has("LoggerInfoPopupOverlay"):
 		vSD_AllNodes_D["LoggerInfoPopupOverlay"]["Node"].visible = false
 
@@ -5120,7 +5119,7 @@ func _fC_OnLoggerInfoOkPressed_Ch() -> void:
 #		vLB_Pressed: bool — новое состояние галочки (сигнал toggled)
 func _fC_OnLoggerInfoDontShowToggled_Ch(vLB_Pressed: bool) -> void:
 	if vLS_StreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerInfoDontShowToggled_Ch", [vLB_Pressed], null)
+		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "_fC_OnLoggerInfoDontShowToggled_Ch", [vLB_Pressed], null)
 	vXD_Settings_D["ShowLoggerRestartInfoPopup"] = not vLB_Pressed
 	_fC_SaveSettings_Ch(vXD_Settings_D)
 	_fC_UpdateConfirmToggleVisual_Ch("ConfirmLoggerInfoToggle", not vLB_Pressed)

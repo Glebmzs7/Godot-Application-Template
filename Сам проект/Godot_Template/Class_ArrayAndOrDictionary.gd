@@ -61,7 +61,6 @@ class_name Class_ArrayAndOrDictionary
 var Class_Help = load("res://Godot_Template/Class_Help.gd").new()
 ## Собственный логгер этого класса — все функции ниже, участвующие в графе вызовов
 ## fC_ComparisonsOf2Variables_0101, пишут именно сюда (см. _vC_ActiveStreamId)
-var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 
 ## Id потока, в который сейчас нужно логировать (пустая строка = логирование выключено).
 ## Выставляется СНАРУЖИ (например, test.gd) перед вызовом fC_ComparisonsOf2Variables_0101 —
@@ -287,7 +286,7 @@ func fC_OvergrowthIf_Tr (vLD_FirstVariable: Dictionary, vLS_func: Dictionary, Pa
 func UniversalBypass (variables, funcparametrs: Dictionary, PathArray:= [], Depth: int = 0):
 	if Depth > 40:
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Depth limit exceeded — aborting to avoid stack overflow", [Depth, PathArray.duplicate()], "push_error")
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Depth limit exceeded — aborting to avoid stack overflow", [Depth, PathArray.duplicate()], "push_error")
 		push_error("⛔ UniversalBypass: превышена глубина рекурсии (", Depth, ") на PathArray=", PathArray, " — прерываю обход, см. лог")
 		return
 	var variables1 = variables
@@ -301,7 +300,7 @@ func UniversalBypass (variables, funcparametrs: Dictionary, PathArray:= [], Dept
 		# if: обходить нечего (variables1 не итерируемый контейнер) — вызываем callback один раз
 		# на весь объект целиком (elV=null сигналит callback-у "это не элемент коллекции")
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: keys == null, single call", [Class_Help.TYPE_NAMES.get(type_id, str(type_id))], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: keys == null, single call", [Class_Help.TYPE_NAMES.get(type_id, str(type_id))], null)
 		returnfunc1 = Class_Help.FunctionCall(funcparametrs, [type_id, variables1, PathArray, null], Class_Logger, _vC_ActiveStreamId)
 	else:
 		# for: обходим все ключи/индексы контейнера по очереди
@@ -309,14 +308,14 @@ func UniversalBypass (variables, funcparametrs: Dictionary, PathArray:= [], Dept
 			var element = variables1[elV]
 			PathArray.append(elV)
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: visiting key", [elV, PathArray.duplicate()], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: visiting key", [elV, PathArray.duplicate()], null)
 			returnfunc1 = Class_Help.FunctionCall(funcparametrs, [type_id , variables1, PathArray, elV], Class_Logger, _vC_ActiveStreamId)
 			match returnfunc1:
 				"Deeper":
 					# if: элемент сам по себе — контейнер, обходим его рекурсивно
 					if typeof (variables1[elV]) in Class_Help.ITERABLE_TYPES_MAP:
 						if _vC_ActiveStreamId != "":
-							Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Deeper, recursing", [elV, Depth+1], null)
+							Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Deeper, recursing", [elV, Depth+1], null)
 						UniversalBypass(variables1[elV], funcparametrs, PathArray, Depth + 1)
 						#2026-08-14: КРИТИЧНЫЙ ФИКС — здесь не хватало pop_back(). Все остальные
 						#ветки match (Further/Higher/Deeper-не-итерируемый) корректно снимают
@@ -339,7 +338,7 @@ func UniversalBypass (variables, funcparametrs: Dictionary, PathArray:= [], Dept
 					else:
 						PathArray.pop_back()
 						if _vC_ActiveStreamId != "":
-							Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Deeper requested but element not iterable — error", [elV], "push_error")
+							Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Deeper requested but element not iterable — error", [elV], "push_error")
 						push_error("⛔ ",variables1," при ", elV, " Не обходится")
 				"Further":
 					# else (в рамках match): просто идём к следующему ключу на этом же уровне
@@ -349,12 +348,12 @@ func UniversalBypass (variables, funcparametrs: Dictionary, PathArray:= [], Dept
 					# else: сигнал остановить обход текущего уровня целиком
 					PathArray.pop_back()
 					if _vC_ActiveStreamId != "":
-						Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Higher, stopping this level", [elV], null)
+						Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: Higher, stopping this level", [elV], null)
 					break
 				_:
 					# else: callback вернул что-то незнакомое — это ошибка использования UniversalBypass
 					if _vC_ActiveStreamId != "":
-						Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: unknown returnfunc1 — error", [elV, returnfunc1], "push_error")
+						Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "UniversalBypass: unknown returnfunc1 — error", [elV, returnfunc1], "push_error")
 					push_error("⛔ returnfunc1 UniversalBypass при ",variables1," и ", funcparametrs, " = ", returnfunc1)
 					return
 
@@ -400,10 +399,10 @@ func PassageAlongWay (Variables1, PathArray: Array, FuncParametrs:= {}):
 			if flagPassageAlongWay:
 				VariablesReturn = VariablesReturn [elPA]
 				if _vC_ActiveStreamId != "":
-					Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "PassageAlongWay: Good flagPassageAlongWay, stepping into", [elPA], null)
+					Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "PassageAlongWay: Good flagPassageAlongWay, stepping into", [elPA], null)
 			else:
 				if _vC_ActiveStreamId != "":
-					Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "PassageAlongWay: Not flagPassageAlongWay, staying at current level", [elPA], null)
+					Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "PassageAlongWay: Not flagPassageAlongWay, staying at current level", [elPA], null)
 		else:
 			VariablesReturn = VariablesReturn [elPA]
 	return VariablesReturn
@@ -432,7 +431,7 @@ func CheckingPath (PathArray: Array, FuncParametrs: Dictionary, Variables):
 	while len(originalPathArray)-1 > 0:
 		originalPathArray.pop_back()
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "CheckingPath: while, walking up one level", [originalPathArray.duplicate()], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "CheckingPath: while, walking up one level", [originalPathArray.duplicate()], null)
 		# Создаем копию словаря параметров, чтобы не изменять оригинальный
 		var FuncParametrsCopy = FuncParametrs.duplicate()
 		Class_Help.FunctionCall(FuncParametrsCopy, [PassageAlongWay(Variables, originalPathArray)], Class_Logger, _vC_ActiveStreamId)
@@ -470,7 +469,7 @@ func fC_ComparisonsOf2Variables_0101 (Variables1, Variables2, ReturnDictionary):
 	# if: типы переменных совпадают — можно сравнивать напрямую
 	if typeof(Variables1) == typeof(Variables2):
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: types match", [Variables1, Variables2], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: types match", [Variables1, Variables2], null)
 		# if: значения полностью равны (для Dictionary/Array — глубокое сравнение через ==)
 		if Variables1 == Variables2:
 			#2026-08-14: KM ("keys match") - суффикс, добавляемый к любому result, кроме
@@ -479,11 +478,11 @@ func fC_ComparisonsOf2Variables_0101 (Variables1, Variables2, ReturnDictionary):
 			ReturnDictionary["result"] = "+KM"
 			ReturnDictionary["Values"] = [Variables1, Variables2]
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: fully equal -> +KM", [], "result=+KM")
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: fully equal -> +KM", [], "result=+KM")
 		# elif: оба — словари, но не равны целиком -> сравниваем по ключам, уходим вглубь
 		elif TYPE_DICTIONARY == typeof(Variables1) and  TYPE_DICTIONARY == typeof(Variables2):
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: both Dictionary, not equal -> diff by key", [Variables1.keys(), Variables2.keys()], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: both Dictionary, not equal -> diff by key", [Variables1.keys(), Variables2.keys()], null)
 			for elV1 in Variables1:
 				if Variables2.has(elV1):
 					ChildReturnDictionary[elV1] = {}
@@ -513,11 +512,11 @@ func fC_ComparisonsOf2Variables_0101 (Variables1, Variables2, ReturnDictionary):
 			ReturnDictionary["result"] = "-KM"
 			ReturnDictionary["Values"] = [Variables1, Variables2]
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: same type, not equal, not Dictionary -> -KM", [Variables1, Variables2], "result=-KM")
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: same type, not equal, not Dictionary -> -KM", [Variables1, Variables2], "result=-KM")
 	# elif: типы разные, но оба — какие-то массивы (Array/Packed*Array) -> сравниваем поэлементно
 	elif Class_Help.ARRAY_TYPES_MAP.has(typeof(Variables1)) and Class_Help.ARRAY_TYPES_MAP.has(typeof(Variables2)):
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: both array-like, different exact type -> diff by index", [Variables1.size(), Variables2.size()], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: both array-like, different exact type -> diff by index", [Variables1.size(), Variables2.size()], null)
 		var LengthArray = min(Variables1.size(), Variables2.size())
 		var Counter = 0
 		while LengthArray > 0:
@@ -545,7 +544,7 @@ func fC_ComparisonsOf2Variables_0101 (Variables1, Variables2, ReturnDictionary):
 		ReturnDictionary["result"] = "-KM"
 		ReturnDictionary["Values"] = [Variables1, Variables2]
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: different types, not both arrays -> -KM", [Variables1, Variables2], "result=-KM")
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "fC_ComparisonsOf2Variables_0101: different types, not both arrays -> -KM", [Variables1, Variables2], "result=-KM")
 
 
 ##Функционал:
@@ -587,25 +586,25 @@ func fC_ComparisonsOf2Variables_0101 (Variables1, Variables2, ReturnDictionary):
 ##		RecalculateResultsRecursive после того как UniversalBypass закончит весь обход целиком.
 func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 0",[InputArray[0]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 0",[InputArray[0]], null)
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 1",[InputArray[1]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 1",[InputArray[1]], null)
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 2",[InputArray[2]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 2",[InputArray[2]], null)
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 3",[InputArray[3]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 3",[InputArray[3]], null)
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 4",[InputArray[4]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 4",[InputArray[4]], null)
 	if _vC_ActiveStreamId != "":
-		Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 5",[InputArray[5]], null)
+		Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101 (Child): InputArray snapshot 5",[InputArray[5]], null)
 
 	if InputArray[5] == "Child":
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: key == \"Child\" -> just Deeper, no recompute", [], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: key == \"Child\" -> just Deeper, no recompute", [], null)
 		return "Deeper"
 	elif InputArray[5] == "result" or InputArray[5] == "Values":
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: key == \"result\"/\"Values\" -> skip, Further", [InputArray[5]], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: key == \"result\"/\"Values\" -> skip, Further", [InputArray[5]], null)
 		return "Further"
 	else:
 		var PathArray = InputArray[4]
@@ -613,7 +612,7 @@ func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 		var ReturnDictionary = InputArray[3][InputArray[5]]
 		if ReturnDictionary.has("result"):
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: already resolved (>/< с первого прохода) -> skip, Further", [InputArray[5]], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: already resolved (>/< с первого прохода) -> skip, Further", [InputArray[5]], null)
 			return "Further"
 		var Variables1 = PassageAlongWay(InputArray[0],PathArray, {"func":_PAW_CO2V})
 		var Variables2 = PassageAlongWay(InputArray[1],PathArray, {"func":_PAW_CO2V})
@@ -621,7 +620,7 @@ func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 		#3.Формируем результат
 		var ChildReturnDictionary := {}
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: Child branch entered", [PathArray.duplicate()], null)
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: Child branch entered", [PathArray.duplicate()], null)
 		if  typeof(Variables1) == typeof(Variables2):
 			if Variables1 == Variables2:
 				#2026-08-14: KM - ключ присутствует в обеих структурах (иначе сюда бы не
@@ -629,11 +628,11 @@ func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 				ReturnDictionary["result"] = "+KM"
 				ReturnDictionary["Values"] = [Variables1, Variables2]
 				if _vC_ActiveStreamId != "":
-					Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: equal -> +KM -> Further", [], null)
+					Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: equal -> +KM -> Further", [], null)
 				return "Further"
 			elif TYPE_DICTIONARY == typeof(Variables1) and TYPE_DICTIONARY == typeof(Variables2):
 				if _vC_ActiveStreamId != "":
-					Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: both Dictionary, not equal -> Deeper", [], null)
+					Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: both Dictionary, not equal -> Deeper", [], null)
 				for elV1 in Variables1:
 					if Variables2.has(elV1):
 						ChildReturnDictionary[elV1] = {}
@@ -659,12 +658,12 @@ func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 				ReturnDictionary["result"] = "-KM"
 				ReturnDictionary["Values"] = [Variables1, Variables2]
 				if _vC_ActiveStreamId != "":
-					Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: same type, not equal, not Dictionary -> -KM -> Further", [], null)
+					Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: same type, not equal, not Dictionary -> -KM -> Further", [], null)
 				return "Further"
 
 		elif Class_Help.ARRAY_TYPES_MAP.has(typeof(Variables1)) and Class_Help.ARRAY_TYPES_MAP.has(typeof(Variables2)):
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: both array-like -> Deeper", [], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: both array-like -> Deeper", [], null)
 			var LengthArray = min(Variables1.size(), Variables2.size())
 			var Counter = 0
 			while LengthArray > 0:
@@ -690,7 +689,7 @@ func _C_ComparisonsOf2Variables_0101 (InputArray: Array):
 			ReturnDictionary["result"] = "-KM"
 			ReturnDictionary["Values"] = [Variables1, Variables2]
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: different types, not both arrays -> -KM -> Further", [], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_C_ComparisonsOf2Variables_0101: different types, not both arrays -> -KM -> Further", [], null)
 			return "Further"
 
 
@@ -754,7 +753,7 @@ func _CP_CO2V (Variables):
 					ChildResult = ChildResult.substr(0, ChildResult.length() - 2)
 				ValueCounter [ChildResult] += 1
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_CP_CO2V: recomputing aggregated result from children", [ValueCounter], null)
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_CP_CO2V: recomputing aggregated result from children", [ValueCounter], null)
 			#2026-08-14: KM нужно добавить к итоговому result этого узла, ТОЛЬКО если среди
 			#потомков был хотя бы один, полученный из настоящего сравнения СОВПАВШЕГО ключа
 			#(+, -, ~ и любые ~-варианты) - а не только из ">"/"<" (ключ был только у одной
@@ -803,7 +802,7 @@ func _CP_CO2V (Variables):
 			if Bv_HasMatchedKeyChild and Variables["result"] != ">" and Variables["result"] != "<":
 				Variables["result"] += "KM"
 			if _vC_ActiveStreamId != "":
-				Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_CP_CO2V: result recomputed", [], Variables.get("result", null))
+				Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_CP_CO2V: result recomputed", [], Variables.get("result", null))
 
 ##Функционал:
 ##	Callback для PassageAlongWay — решает, нужно ли на данном шаге пути заходить внутрь
@@ -829,5 +828,5 @@ func _PAW_CO2V (Array):
 	var elPA = Array[2]
 	if elPA == "Child":
 		if _vC_ActiveStreamId != "":
-			Class_Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_PAW_CO2V: elPA == Child -> skip this level", [elPA], "flagPassageAlongWay=false")
+			Logger.fC_Adding_Buffer_Cr(_vC_ActiveStreamId, "_PAW_CO2V: elPA == Child -> skip this level", [elPA], "flagPassageAlongWay=false")
 		return {"flagPassageAlongWay": false}

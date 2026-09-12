@@ -115,7 +115,6 @@ extends Node
 class_name Class_UI
 
 var Class_ArrDict = load("res://Godot_Template/Class_ArrayAndOrDictionary.gd").new()
-var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 
 #Функционал:
 #	Создание и вставка узла в сцену по конфигурации
@@ -132,7 +131,7 @@ var Class_Logger = load("res://Godot_Template/Class_Logger.gd").new()
 #	5. Возвращает инфу о созданном узле
 func fC_Creating_Node_CrTr(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> Dictionary:
 	if Class_ArrDict._vC_ActiveStreamId != "":
-		Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: start", [], null)
+		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: start", [], null)
 
 	# 0. Подготовка словарей
 	var pLX_Data_D: Dictionary = X_NodeConfig_D.get("__Data_D", {})
@@ -211,7 +210,7 @@ func fC_Creating_Node_CrTr(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> D
 	var pLX_NodeName_S: String = pLX_Inspector_D.get("name", "UnnamedNode")
 
 	if Class_ArrDict._vC_ActiveStreamId != "":
-		Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: node created and inserted", [pLX_NodeName_S, str(pLX_InsertPath)], null)
+		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: node created and inserted", [pLX_NodeName_S, str(pLX_InsertPath)], null)
 	return {
 		pLX_NodeName_S: {
 			"Node": pLX_NodeObj,
@@ -417,7 +416,7 @@ func fxC_UpdateExistingNodes_Ch(vXD_All_nodes: Dictionary, vD_Changes: Dictionar
 	for name in vD_Changes:
 		if not vXD_All_nodes.has(name):
 			if Class_ArrDict._vC_ActiveStreamId != "":
-				Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: node not found", [name], "push_warning")
+				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: node not found", [name], "push_warning")
 			push_warning("⚠️ Нода %s не найдена для обновления." % name)
 			continue
 		var node = vXD_All_nodes[name]["Node"]
@@ -425,10 +424,10 @@ func fxC_UpdateExistingNodes_Ch(vXD_All_nodes: Dictionary, vD_Changes: Dictionar
 			if property in node:
 				node.set(property, vD_Changes[name][property])
 				if Class_ArrDict._vC_ActiveStreamId != "":
-					Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property updated", [name, property, vD_Changes[name][property]], null)
+					Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property updated", [name, property, vD_Changes[name][property]], null)
 			else:
 				if Class_ArrDict._vC_ActiveStreamId != "":
-					Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property not found on node", [name, property], "push_warning")
+					Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property not found on node", [name, property], "push_warning")
 				push_warning("⚠️ Свойство %s не найдено у ноды %s." % [property, name])
 
 
@@ -471,17 +470,17 @@ func _fC_SafeGetByPath(vLD_Root: Dictionary, vLA_Path: Array):
 #	2. Проход по старому конфигу (UniversalBypass) — удаляет ноды, которых больше нет в новом
 #	Обход — Class_ArrDict.UniversalBypass; логи — в Class_ArrDict.Class_Logger, см. changelog
 func fC_SyncNodesWithConfig_Ch(vXD_All_nodes: Dictionary, vXD_OldConfig: Dictionary, vXD_NewConfig: Dictionary) -> Dictionary:
-	var vLS_StreamId: String = Class_ArrDict.Class_Logger.fC_RegisterStream_Cr("UI:Sync")
+	var vLS_StreamId: String = Logger.fC_RegisterStream_Cr("UI:Sync")
 	Class_ArrDict._vC_ActiveStreamId = vLS_StreamId
 
-	Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: start, pass 1 (create/update)", [], null)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: start, pass 1 (create/update)", [], null)
 	Class_ArrDict.UniversalBypass(vXD_NewConfig, {"func": f__SyncCallback_CreateOrUpdate, "Parametrs": [vXD_All_nodes, vXD_OldConfig, vXD_NewConfig]})
 
-	Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: pass 2 (delete)", [], null)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: pass 2 (delete)", [], null)
 	Class_ArrDict.UniversalBypass(vXD_OldConfig, {"func": f__SyncCallback_Delete, "Parametrs": [vXD_All_nodes, vXD_NewConfig]})
 
-	Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: done", [], null)
-	Class_ArrDict.Class_Logger.fC_FinishStream_Ch(vLS_StreamId)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: done", [], null)
+	Logger.fC_FinishStream_Ch(vLS_StreamId)
 	Class_ArrDict._vC_ActiveStreamId = ""
 
 	return vXD_NewConfig.duplicate(true)
@@ -522,12 +521,12 @@ func f__SyncCallback_CreateOrUpdate(InputArray: Array) -> String:
 		var vLD_OldVal = _fC_SafeGetByPath(vXD_OldConfig, vLA_PathArray)
 		if typeof(vLD_OldVal) != TYPE_DICTIONARY or not _fC_IsNodeConfig(vLD_OldVal):
 			if Class_ArrDict._vC_ActiveStreamId != "":
-				Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: new node, creating", [vLA_PathArray.duplicate()], null)
+				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: new node, creating", [vLA_PathArray.duplicate()], null)
 			var vLD_Created = fC_Creating_Node_CrTr(vLD_NewVal, vLA_BelongTo_A)
 			vXD_All_nodes.merge(vLD_Created)
 		else:
 			if Class_ArrDict._vC_ActiveStreamId != "":
-				Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: existing node, comparing", [vLA_PathArray.duplicate()], null)
+				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: existing node, comparing", [vLA_PathArray.duplicate()], null)
 			_fC_SyncExistingNode(vXD_All_nodes, vLD_OldVal, vLD_NewVal, vLA_BelongTo_A)
 
 	# Рекурсия внутрь ЭТОГО ЖЕ словаря — тут может найтись её обёртка с детьми
@@ -557,7 +556,7 @@ func f__SyncCallback_Delete(InputArray: Array) -> String:
 		var vLD_NewVal = _fC_SafeGetByPath(vXD_NewConfig, vLA_PathArray)
 		if typeof(vLD_NewVal) != TYPE_DICTIONARY or not _fC_IsNodeConfig(vLD_NewVal):
 			if Class_ArrDict._vC_ActiveStreamId != "":
-				Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_Delete: node removed from config, deleting", [vLA_PathArray.duplicate()], null)
+				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_Delete: node removed from config, deleting", [vLA_PathArray.duplicate()], null)
 			_fC_DeleteNodeByConfigKey(vXD_All_nodes, vLD_OldVal)
 			# Дальше НЕ "return Further" — идём "Deeper" и по бывшим детям тоже,
 			# чтобы вычистить их из vXD_All_nodes (сами Godot-ноды каскадно
@@ -592,7 +591,7 @@ func _fC_SyncExistingNode(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dictiona
 
 	if vLB_NeedsRecreate:
 		if Class_ArrDict._vC_ActiveStreamId != "":
-			Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: __Data_D/__Node_D changed, recreating", [vLS_OldName], null)
+			Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: __Data_D/__Node_D changed, recreating", [vLS_OldName], null)
 		if vXD_All_nodes.has(vLS_OldName):
 			vXD_All_nodes[vLS_OldName]["Node"].queue_free()
 			vXD_All_nodes.erase(vLS_OldName)
@@ -624,7 +623,7 @@ func _fC_SyncExistingNode(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dictiona
 		return
 
 	if Class_ArrDict._vC_ActiveStreamId != "":
-		Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: only __Inspector_D changed, point-updating", [vLS_OldName, vLD_ChangedProps], null)
+		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: only __Inspector_D changed, point-updating", [vLS_OldName, vLD_ChangedProps], null)
 	fxC_UpdateExistingNodes_Ch(vXD_All_nodes, {vLS_OldName: vLD_ChangedProps})
 
 
@@ -642,7 +641,7 @@ func _fC_DeleteNodeByConfigKey(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dic
 		vXD_All_nodes.erase(vLS_Name)
 	else:
 		if Class_ArrDict._vC_ActiveStreamId != "":
-			Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_DeleteNodeByConfigKey: node not found in registry", [vLS_Name], "push_warning")
+			Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_DeleteNodeByConfigKey: node not found in registry", [vLS_Name], "push_warning")
 		push_warning("⚠️ Нода %s не найдена в реестре для удаления." % vLS_Name)
 
 
