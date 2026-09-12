@@ -1,10 +1,10 @@
 extends Node
 
-## Regression test for the fix where a recreated node's children (nested
-## under a wrapper key next to __Data_D/__Inspector_D/__Node_D) used to be
-## lost — fC_SyncingNodesWithConfig_1111 now calls fC_MassCreatingNode_0001
-## (wrapped by name) instead of the single-node creator at both the
-## new-node and recreate-existing-node paths.
+## Регрессионный тест для фикса, из-за которого дети пересоздаваемой ноды
+## (вложенные под ключом-обёрткой рядом с __Data_D/__Inspector_D/__Node_D)
+## терялись — fC_SyncingNodesWithConfig_1111 теперь вызывает
+## fC_MassCreatingNode_0001 (обёрнутый по имени) вместо одиночного создателя
+## ноды и в ветке создания новой ноды, и в ветке пересоздания существующей.
 
 var _ui = load("res://Godot_Template/Class_UI.gd").new()
 var _all_nodes: Dictionary = {}
@@ -34,8 +34,9 @@ func _ready() -> void:
 	_ui.fC_MassCreatingNode_0001(config_a, _all_nodes)
 	var child_present_after_create: bool = _all_nodes.has("TestChildLabel")
 
-	# Force full recreation of TestPanel by changing its __type_S — the same
-	# trigger _fC_SyncExistingNode uses to decide "recreate, don't just update"
+	# Меняем __type_S у TestPanel, чтобы вызвать полное пересоздание — это тот
+	# же признак, по которому _fC_SyncExistingNode решает "пересоздать, а не
+	# просто обновить"
 	var config_b: Dictionary = _build_config("PanelContainer")
 	_ui.fC_SyncingNodesWithConfig_1111(_all_nodes, config_a, config_b)
 	var child_present_after_recreate: bool = _all_nodes.has("TestChildLabel")

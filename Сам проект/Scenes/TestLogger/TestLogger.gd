@@ -1,9 +1,9 @@
 extends Node
 
-## Regression test: Class_Logger.gd is now a shared autoload ("Logger" in
-## project.godot), not a separate instance per class. Registers two streams
-## simulating two different classes and confirms both land in the SAME
-## session log file — that was the whole point of the autoload fix.
+## Регрессионный тест: Class_Logger.gd теперь общий автозагружаемый синглтон
+## ("Logger" в project.godot), а не отдельный экземпляр на каждый класс.
+## Регистрирует два потока, имитируя два разных класса, и проверяет, что оба
+## попали в ОДИН И ТОТ ЖЕ файл лога сессии — в этом и был смысл фикса автозагрузки.
 
 var _json = load("res://Godot_Template/Class_Json.gd").new()
 
