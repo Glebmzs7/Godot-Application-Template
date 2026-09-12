@@ -7,9 +7,9 @@ extends Node
 #mzs7
 ##2026-08-17 - mzs7 - убрана заглушка (Label "Стартовая сцена" + таймер 1.5с).
 ##	Вместо неё — 4 блока стартового экрана, собираемые через код (см. функции
-##	ниже) через Class_UI.fC_SyncNodesWithConfig_Ch (old={} -> new=конфиг экрана,
+##	ниже) через Class_UI.fC_SyncingNodesWithConfig_1111 (old={} -> new=конфиг экрана,
 ##	то есть все ноды экрана создаются одним проходом UniversalBypass — см.
-##	changelog fC_SyncNodesWithConfig_Ch в Class_UI.gd)
+##	changelog fC_SyncingNodesWithConfig_1111 в Class_UI.gd)
 ##2026-08-17 - mzs7 - переход на Home больше не по таймеру, а по кнопке
 ##	"Войти" (InfoBoxProceedButton) — она появляется только когда ВСЕ 5
 ##	проверок в vLD_CheckStatuses_D станут "passed" (см. _fC_UpdateOverallProgress_Ch)
@@ -23,7 +23,7 @@ extends Node
 ##	проверкой — см. _fC_VerifyInterfaceBuilt_Bv
 ##2026-08-17 - mzs7 - добавлена fC_SwitchOrientation_Ch — переключает
 ##	vLS_Orientation_S ("Vertical"/"Horizontal") и пересобирает экран через тот
-##	же fC_SyncNodesWithConfig_Ch (old=текущий конфиг -> new=конфиг под новую
+##	же fC_SyncingNodesWithConfig_1111 (old=текущий конфиг -> new=конфиг под новую
 ##	ориентацию). Механизм готов, реального переключателя в настройках пока нет —
 ##	это отдельная задача (Save/Settings.json сейчас пустой)
 ##2026-08-17 - mzs7 - _ready() переписан на жёсткую последовательность с
@@ -53,7 +53,7 @@ extends Node
 ##	что открыла окно, сейчас просто игнорируется (см. хвост _fC_ToggleModal_Ch) —
 ##	кнопка не серая (не задизейблена), но и не переключает модалку на себя
 ##2026-08-17 - mzs7 - конфиг экрана переведён на ВЛОЖЕННЫЙ формат с явным
-##	__Children_D (см. Class_UI.gd, changelog fC_Mass_Creating_Node_CrTr): дети
+##	__Children_D (см. Class_UI.gd, changelog fC_MassCreatingNode_0001): дети
 ##	ноды лежат не вперемешку с __Data_D/__Inspector_D/__Node_D, а в отдельном
 ##	ключе __Children_D рядом с ними — {__Data_D:{...}, __Inspector_D:{...},
 ##	__Node_D:{...}, __Children_D:{ИмяРебёнка: {... тот же формат ...}}}.
@@ -64,9 +64,9 @@ extends Node
 ##	их выставляет сам Class_UI по ключу словаря и его положению в дереве.
 ##	_fC_NodeCfg/builder-функции ниже переписаны под эту форму
 ##2026-08-17 - mzs7 - _fC_BuildScreen_Ch теперь строит экран через
-##	Class_UI.fC_Mass_Creating_Node_CrTr (её и чинили только что в Class_UI.gd),
-##	а не через fC_SyncNodesWithConfig_Ch(..., {}, конфиг) — для самой первой
-##	сборки это ровно то, для чего мас-крейт и предназначена. fC_SyncNodesWithConfig_Ch
+##	Class_UI.fC_MassCreatingNode_0001 (её и чинили только что в Class_UI.gd),
+##	а не через fC_SyncingNodesWithConfig_1111(..., {}, конфиг) — для самой первой
+##	сборки это ровно то, для чего мас-крейт и предназначена. fC_SyncingNodesWithConfig_1111
 ##	по-прежнему используется в fC_SwitchOrientation_Ch (там нужен именно diff
 ##	старого/нового конфига) — обе функции теперь ждут один и тот же вложенный формат
 ##2026-08-18 - mzs7 - каждый из 5 блоков верхнего уровня (CheckListPanel/
@@ -75,7 +75,7 @@ extends Node
 ##	восстановленная логическая метка "принадлежности" (см. changelog Class_UI.gd,
 ##	не путь в дереве сцены, отдельный механизм). Её подхватывают все вложенные
 ##	ноды блока через A_BelongTo_A — можно будет проводить массовые операции по
-##	блоку целиком (Class_UI.fxC_MassDelitNode/fC_Node_changes_key), не трогая остальные.
+##	блоку целиком (Class_UI.fxC_MassDeletingNode_0010/fC_ChangingNodesByKey_0011), не трогая остальные.
 ##	_fC_CountNodeConfigs_I обновлена — обходит любую обёртку-Dictionary одинаково,
 ##	а не только буквально "__Children_D" (тот же принцип, что и в Class_UI.gd)
 ##2026-08-19 - mzs7 - _fC_BuildScreenConfig_Cr переписана на ОДИН вложенный
@@ -198,7 +198,7 @@ extends Node
 ##	   осознанный контролируемый останов (OS.alert+quit), не случайный сбой, и
 ##	   он уже и логирует, и показывает окно ОС;
 ##	4) print → лог, добавлено логирование на развилках. В Class_UI.gd —
-##	   дочинены 2 "забытых" print() в fC_Creating_Node_CrTr (см. её же
+##	   дочинены 2 "забытых" print() в fC_CreatingNode_1000 (см. её же
 ##	   changelog отдельно, файл Class_UI.gd). В Start_Program.gd print() не
 ##	   было вообще — добавлено логирование через Class_Logger.fC_Adding_Buffer_Cr
 ##	   (гейтовано по vLS_StreamId != "", как и весь остальной проект) на
@@ -236,7 +236,7 @@ extends Node
 ##	   вызывает _fC_RescaleFonts_Ch, которая строит свежий конфиг ТОЛЬКО чтобы
 ##	   получить актуальные числа размера шрифта под новый размер окна и
 ##	   точечно обновляет существующие ноды через уже готовый
-##	   Class_UI.fxC_UpdateExistingNodes_Ch — полной пересборки экрана не требует.
+##	   Class_UI.fxC_UpdatingExistingNodes_0100 — полной пересборки экрана не требует.
 ##	   ⚠️ Если текст ВСЁ РАВНО останется размытым после этой правки — скорее
 ##	   всего дело не в коде экрана, а в project.godot: window/stretch/mode=
 ##	   "canvas_items" + window/stretch/scale=0.5 — это масштабирует УЖЕ
@@ -724,11 +724,11 @@ var vLS_StreamId: String = ""
 var vSV2_Scene_size_V2i := Vector2(540, 900)
 
 ## Реестр всех созданных нод экрана: {уникальное_имя: {Node, ...}} — заполняется/
-## обновляется через Class_UI.fC_SyncNodesWithConfig_Ch, напрямую не трогаем
+## обновляется через Class_UI.fC_SyncingNodesWithConfig_1111, напрямую не трогаем
 var vSD_AllNodes_D := {}
 
 ## Конфиг экрана, который сейчас реально применён — нужен как "старый" конфиг
-## для fC_SyncNodesWithConfig_Ch при следующей пересборке (см. fC_SwitchOrientation_Ch)
+## для fC_SyncingNodesWithConfig_1111 при следующей пересборке (см. fC_SwitchOrientation_Ch)
 var vXD_CurrentScreenConfig_D := {}
 
 ## Текущая ориентация экрана. "Vertical" по умолчанию — совпадает с реальным
@@ -991,7 +991,7 @@ const APP_VERSION_S := "0.1.0.0"
 #	Выходные: нет
 #Принцип работы:
 #	1. Добавляет Class_UI в дерево сцены — без этого не работает get_tree()
-#		внутри fC_Creating_Node_CrTr/fxC_SceneSwitching
+#		внутри fC_CreatingNode_1000/fxC_SwitchingScene_0000
 #	2. Запускает логгер и ЧЕСТНО проверяет результат ДО того, как строить
 #		хоть что-то на экране. Провал — fC_FatalStartupError_Ch и выход,
 #		дальше _ready() не идёт (интерфейса без рабочего логгера не будет)
@@ -1168,7 +1168,7 @@ func _unhandled_input(vL_Event: InputEvent) -> void:
 #	Строит конфиг словаря для узла-конфига (__Data_D/__Inspector_D/__Node_D,
 #	опционально __Children_D) — сокращает повторяющийся код при описании экрана.
 #	Путь до родителя и имя ноды НЕ указываются — их выставляет сам Class_UI
-#	(fC_Mass_Creating_Node_CrTr/fC_SyncNodesWithConfig_Ch) по ключу словаря и
+#	(fC_MassCreatingNode_0001/fC_SyncingNodesWithConfig_1111) по ключу словаря и
 #	его месту в дереве (см. changelog)
 #Форматы данных:
 #	Входные:
@@ -1391,7 +1391,7 @@ func _fC_FontSize_I(vLS_Tier_S: String) -> int:
 #		vLD_Tree_D: Dictionary — дерево конфига (или его часть)
 #	Выходные:
 #		Dictionary — плоский {ИмяНоды: {свойство: значение}}, формат, который
-#			ожидает Class_UI.fxC_UpdateExistingNodes_Ch
+#			ожидает Class_UI.fxC_UpdatingExistingNodes_0100
 func _fC_CollectFontSizeUpdates_Cr(vLD_Tree_D: Dictionary) -> Dictionary:
 	var vLD_Updates_D := {}
 	for elLS_Key in vLD_Tree_D:
@@ -1416,11 +1416,11 @@ func _fC_CollectFontSizeUpdates_Cr(vLD_Tree_D: Dictionary) -> Dictionary:
 #	целиком (ноды/раскладка через anchor и так масштабонезависимы) — строит
 #	СВЕЖИЙ конфиг только чтобы получить актуальные числа размеров шрифта
 #	(_fC_FontSize_I внутри него уже посчитает их под новый get_window().size)
-#	и точечно обновляет через уже существующий Class_UI.fxC_UpdateExistingNodes_Ch
+#	и точечно обновляет через уже существующий Class_UI.fxC_UpdatingExistingNodes_0100
 func _fC_RescaleFonts_Ch() -> void:
 	var vXD_FreshConfig_D: Dictionary = _fC_BuildScreenConfig_Cr(vLS_Orientation_S)
 	var vLD_FontUpdates_D: Dictionary = _fC_CollectFontSizeUpdates_Cr(vXD_FreshConfig_D)
-	Class_UI.fxC_UpdateExistingNodes_Ch(vSD_AllNodes_D, vLD_FontUpdates_D)
+	Class_UI.fxC_UpdatingExistingNodes_0100(vSD_AllNodes_D, vLD_FontUpdates_D)
 
 	# Список языков создаётся НАПРЯМУЮ (не через конфиг, см. changelog
 	# _fC_RebuildLanguageList_Ch), поэтому _fC_CollectFontSizeUpdates_Cr его не
@@ -3297,7 +3297,7 @@ func _fC_BuildScreenConfig_Cr(vLS_TargetOrientation_S: String) -> Dictionary:
 	# логическая метка (см. changelog Class_UI.gd, 2026-08-18), которую подхватят
 	# все вложенные ноды блока через A_BelongTo_A. От реального пути в дереве
 	# сцены никак не зависит — нужна для будущих массовых операций по блоку целиком
-	# (например, Class_UI.fxC_MassDelitNode(vSD_AllNodes_D, ...) по тегу "CheckListPanel")
+	# (например, Class_UI.fxC_MassDeletingNode_0010(vSD_AllNodes_D, ...) по тегу "CheckListPanel")
 	for elLS_BlockKey in vLD_Screen_D:
 		vLD_Screen_D[elLS_BlockKey]["v__Ebeveyn"] = elLS_BlockKey
 
@@ -3306,7 +3306,7 @@ func _fC_BuildScreenConfig_Cr(vLS_TargetOrientation_S: String) -> Dictionary:
 
 #Функционал:
 #	Строит конфиг под текущую vLS_Orientation_S и создаёт весь экран одним
-#	проходом через Class_UI.fC_Mass_Creating_Node_CrTr — она и предназначена
+#	проходом через Class_UI.fC_MassCreatingNode_0001 — она и предназначена
 #	для самой первой сборки дерева нод целиком (см. changelog Class_UI.gd).
 #	После сборки — донастройка окна Поддержка/Настройки, которую нельзя
 #	описать статическим конфигом: подставить сохранённые значения настроек в
@@ -3315,7 +3315,7 @@ func _fC_BuildScreenConfig_Cr(vLS_TargetOrientation_S: String) -> Dictionary:
 #	под изначально активную категорию
 func _fC_BuildScreen_Ch() -> void:
 	vXD_CurrentScreenConfig_D = _fC_BuildScreenConfig_Cr(vLS_Orientation_S)
-	Class_UI.fC_Mass_Creating_Node_CrTr(vXD_CurrentScreenConfig_D, vSD_AllNodes_D)
+	Class_UI.fC_MassCreatingNode_0001(vXD_CurrentScreenConfig_D, vSD_AllNodes_D)
 	_fC_ApplySettingsToUI_Ch()
 	_fC_RebuildLanguageList_Ch("")
 	_fC_UpdateModalContentVisibility_Ch()
@@ -3324,7 +3324,7 @@ func _fC_BuildScreen_Ch() -> void:
 
 #Функционал:
 #	Переключает ориентацию экрана на лету — пересобирает конфиг под новую
-#	ориентацию и передаёт старый/новый конфиг в fC_SyncNodesWithConfig_Ch,
+#	ориентацию и передаёт старый/новый конфиг в fC_SyncingNodesWithConfig_1111,
 #	который сам решает, что пересоздать/точечно обновить/удалить (см. её
 #	changelog в Class_UI.gd). Готовый механизм под будущий переключатель в
 #	настройках — сам переключатель не входит в эту задачу
@@ -3336,7 +3336,7 @@ func fC_SwitchOrientation_Ch(vLS_NewOrientation_S: String) -> void:
 	if vLS_StreamId != "":
 		Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SwitchOrientation_Ch: switching", [vLS_Orientation_S, vLS_NewOrientation_S], null)
 	var vXD_NewConfig_D: Dictionary = _fC_BuildScreenConfig_Cr(vLS_NewOrientation_S)
-	Class_UI.fC_SyncNodesWithConfig_Ch(vSD_AllNodes_D, vXD_CurrentScreenConfig_D, vXD_NewConfig_D)
+	Class_UI.fC_SyncingNodesWithConfig_1111(vSD_AllNodes_D, vXD_CurrentScreenConfig_D, vXD_NewConfig_D)
 	vXD_CurrentScreenConfig_D = vXD_NewConfig_D
 	vLS_Orientation_S = vLS_NewOrientation_S
 
@@ -3365,7 +3365,7 @@ func _fC_CountNodeConfigs_I(vLD_Tree_D: Dictionary) -> int:
 #Функционал:
 #	Честно проверяет, что интерфейс реально собрался целиком: сверяет число
 #	нод, фактически оказавшихся в vSD_AllNodes_D, с числом нод-конфигов в
-#	vXD_CurrentScreenConfig_D. Расхождение = где-то внутри fC_Creating_Node_CrTr
+#	vXD_CurrentScreenConfig_D. Расхождение = где-то внутри fC_CreatingNode_1000
 #	сработал push_error и вернул {} (несуществующий тип, не найден путь и т.п.)
 func _fC_VerifyInterfaceBuilt_Bv() -> bool:
 	var vLI_Expected: int = _fC_CountNodeConfigs_I(vXD_CurrentScreenConfig_D)
@@ -3499,7 +3499,7 @@ func _fC_OnAccountOptionPressed_Ch(vLS_Account_S: String) -> void:
 #	запускает настоящее подключение (_fC_StartClientConnection_Ch)
 func _fC_RunServerCheck_Ch() -> void:
 	if vLS_SelectedAccount_S == ACCOUNT_TECHNICAL_SERVER_VALUE:
-		Class_UI.fxC_SceneSwitching("res://Scenes/test/test.tscn")
+		Class_UI.fxC_SwitchingScene_0000("res://Scenes/test/test.tscn")
 		return
 	_fC_StartClientConnection_Ch()
 
@@ -3867,7 +3867,7 @@ func _fC_OnAutonomousModePressed_Ch() -> void:
 #	режим "форма добавления аккаунта" — обработчик всегда присутствующей
 #	кнопки "+" (см. цикл в _fC_BuildScreenConfig_Cr). Прямая правка
 #	видимости нод (как и у _fC_ShowAccountPicker_Ch выше) — данные ещё не
-#	меняются, поэтому пересборка экрана (fC_SyncNodesWithConfig_Ch) здесь не
+#	меняются, поэтому пересборка экрана (fC_SyncingNodesWithConfig_1111) здесь не
 #	нужна
 #Форматы данных:
 #	Входные: нет
@@ -3932,7 +3932,7 @@ func _fL_ReadAndValidateAccountAddForm_Cr() -> Dictionary:
 #	AccountPickerAddForm/AccountPickerScroll/AccountPickerSection выставляем
 #	ПОСЛЕ пересборки, а не до. Раньше (когда список кнопок был отдельной
 #	веткой без общего родителя с формой) это было не важно, но теперь и
-#	список, и форма лежат ВНУТРИ AccountPickerSection — а fC_SyncNodesWithConfig_Ch
+#	список, и форма лежат ВНУТРИ AccountPickerSection — а fC_SyncingNodesWithConfig_1111
 #	решает, пересоздавать ли ноду, по тому, отличается ли ЕЁ ПОДДЕРЕВО целиком
 #	(старый/новый конфиг сравниваются рекурсивно, см. f__SyncCallback_CreateOrUpdate
 #	в Class_UI.gd) — раз список кнопок внутри AccountPickerSection изменился,
@@ -4068,7 +4068,7 @@ func _fC_OnOAuthButtonPressed_Ch(vLS_Provider_S: String) -> void:
 
 #Функционал:
 #	2026-08-23: пересобирает конфиг экрана под ТЕКУЩУЮ ориентацию и передаёт
-#	старый/новый конфиг в Class_UI.fC_SyncNodesWithConfig_Ch — та же самая
+#	старый/новый конфиг в Class_UI.fC_SyncingNodesWithConfig_1111 — та же самая
 #	идея, что и у fC_SwitchOrientation_Ch (см. её changelog), но повод другой:
 #	не сменилась ориентация, а изменились данные (vLD_AccountsList_D), из
 #	которых строится часть конфига. Вынесена отдельно, чтобы этот приём
@@ -4081,7 +4081,7 @@ func _fC_OnOAuthButtonPressed_Ch(vLS_Provider_S: String) -> void:
 #	Выходные: нет
 func _fC_RefreshScreenAfterDataChange_Ch() -> void:
 	var vXD_NewConfig_D: Dictionary = _fC_BuildScreenConfig_Cr(vLS_Orientation_S)
-	Class_UI.fC_SyncNodesWithConfig_Ch(vSD_AllNodes_D, vXD_CurrentScreenConfig_D, vXD_NewConfig_D)
+	Class_UI.fC_SyncingNodesWithConfig_1111(vSD_AllNodes_D, vXD_CurrentScreenConfig_D, vXD_NewConfig_D)
 	vXD_CurrentScreenConfig_D = vXD_NewConfig_D
 
 
@@ -4127,7 +4127,7 @@ func _fC_UpdateOverallProgress_Ch() -> void:
 #	Нажатие "Войти" — завершает поток логов сцены и переключается на Home
 func _fC_OnProceedPressed_Ch() -> void:
 	Logger.fC_FinishStream_Ch(vLS_StreamId)
-	Class_UI.fxC_SceneSwitching("res://Scenes/UIScenes/Home/Home.tscn")
+	Class_UI.fxC_SwitchingScene_0000("res://Scenes/UIScenes/Home/Home.tscn")
 
 
 #Функционал:

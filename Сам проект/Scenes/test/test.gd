@@ -2,7 +2,7 @@ extends Node
 
 ## 2026-08-23: сцена "test" — место, где поднимается сервер, когда в окне
 ## выбора аккаунта на Start_Program выбрано техническое значение "Server"
-## (см. Start_Program.gd → _fC_RunServerCheck_Ch, Class_UI.fxC_SceneSwitching(".../test.tscn")).
+## (см. Start_Program.gd → _fC_RunServerCheck_Ch, Class_UI.fxC_SwitchingScene_0000(".../test.tscn")).
 ## Фаза 1 (2026-08-23): реальное поднятие сервера (порт слушается, Hello/
 ## авторизация работают, см. Class_InternetServer.gd). 2026-08-23 (фаза 2):
 ## обработка "CheckUpdate"/"CheckFiles" от клиента — РЕАЛИЗОВАНА (см.
