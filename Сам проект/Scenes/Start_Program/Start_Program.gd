@@ -1778,7 +1778,7 @@ func _fC_BuildScreenConfig_Cr(vLS_TargetOrientation_S: String) -> Dictionary:
 	# фиксированная структура. Список аккаунтов из vLD_AccountsList_D (файл),
 	# в конце ВСЕГДА добавлена кнопка "+" (см. _fC_OnAccountAddButtonPressed_Ch)
 	var vLD_AccountButtons_D := {}
-	for elLS_Account in vLD_AccountsList_D.keys() + [ACCOUNT_TECHNICAL_SERVER_VALUE]:
+	for elLS_Account in vLD_AccountsList_D.keys():
 		vLD_AccountButtons_D["AccountPickerButton_%s" % elLS_Account] = _fC_NodeCfg("Button", {
 			"text": elLS_Account,
 			"size_flags_horizontal": 3,
@@ -3494,12 +3494,12 @@ func _fC_OnAccountOptionPressed_Ch(vLS_Account_S: String) -> void:
 #Функционал:
 #	2026-08-23 (правка, была заглушка): продолжение проверки "Server" после
 #	выбора аккаунта. Роль "Server" — сама сцена Start_Program для неё не
-#	место: переключаемся на res://Scenes/test/test.tscn, там (см. её changelog)
+#	место: переключаемся на res://Scenes/StartServer/StartServer.tscn, там (см. её changelog)
 #	поднимается Class_InternetServer. Реальный аккаунт — остаётся здесь и
 #	запускает настоящее подключение (_fC_StartClientConnection_Ch)
 func _fC_RunServerCheck_Ch() -> void:
 	if vLS_SelectedAccount_S == ACCOUNT_TECHNICAL_SERVER_VALUE:
-		Class_UI.fxC_SwitchingScene_0000("res://Scenes/test/test.tscn")
+		Class_UI.fxC_SwitchingScene_0000("res://Scenes/StartServer/StartServer.tscn")
 		return
 	_fC_StartClientConnection_Ch()
 
