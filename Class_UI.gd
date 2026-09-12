@@ -1,35 +1,35 @@
 ##Версия оформления
-##2026-08-16 - mzs7 - добавлена fC_SyncNodesWithConfig_Ch: рекурсивно сравнивает старый и
+##2026-08-16 - mzs7 - добавлена fC_SyncingNodesWithConfig_1111: рекурсивно сравнивает старый и
 ##	новый конфиг нод через fC_ComparisonsOf2Variables_0101 (Class_ArrayAndOrDictionary) и
 ##	сама вызывает создание/пересоздание/точечное обновление/удаление нод — см. комментарий
-##	прямо над функцией. Обход — через Class_ArrDict.UniversalBypass (тот же обход, что чинили
+##	прямо над функцией. Обход — через vCC_ClassArrDict.UniversalBypass (тот же обход, что чинили
 ##	вместе в Class_ArrayAndOrDictionary — см. её changelog про PathArray.pop_back)
-##2026-08-16 - mzs7 - попутно починена fxC_UpdateExistingNodes_Ch (её теперь использует
-##	fC_SyncNodesWithConfig_Ch для точечного обновления): звала несуществующие
+##2026-08-16 - mzs7 - попутно починена fxC_UpdatingExistingNodes_0100 (её теперь использует
+##	fC_SyncingNodesWithConfig_1111 для точечного обновления): звала несуществующие
 ##	Class_Logger.fx__Log_Warn/fx__Log_Info (у Class_Logger другой, потоковый API) и
 ##	несуществующий в Godot 4 node.has_property() — заменено на "property in node"
-##2026-08-16 - mzs7 - print/push_warning заменены на Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr
-##	в поток, гейтованный через Class_ArrDict._vC_ActiveStreamId, по тому же принципу, что уже
+##2026-08-16 - mzs7 - print/push_warning заменены на vCC_ClassArrDict.Class_Logger.fC_Adding_Buffer_Cr
+##	в поток, гейтованный через vCC_ClassArrDict._vC_ActiveStreamId, по тому же принципу, что уже
 ##	используют Class_ArrayAndOrDictionary/test.gd. Для настоящих проблем (нода не найдена и
 ##	т.п.) push_warning всё равно вызывается ДОПОЛНИТЕЛЬНО к логу — как это уже делает
 ##	UniversalBypass с push_error при превышении глубины рекурсии, т.е. в лог и в консоль
 ##	редактора одновременно, а не взамен друг друга
 ##	⚠️ ВАЖНО про то, ЧЕЙ Class_Logger/_vC_ActiveStreamId используется: у этого класса своя
-##	собственная var Class_Logger (отдельный объект от Class_ArrDict.Class_Logger — ДВА разных
+##	собственная var Class_Logger (отдельный объект от vCC_ClassArrDict.Class_Logger — ДВА разных
 ##	экземпляра Class_Logger.gd). Но UniversalBypass/PassageAlongWay/_CP_CO2V внутри
-##	Class_ArrayAndOrDictionary жёстко используют СВОЙ ЖЕ Class_ArrDict.Class_Logger и СВОЙ ЖЕ
-##	Class_ArrDict._vC_ActiveStreamId — подставить туда чужой логгер снаружи нельзя. Поэтому,
+##	Class_ArrayAndOrDictionary жёстко используют СВОЙ ЖЕ vCC_ClassArrDict.Class_Logger и СВОЙ ЖЕ
+##	vCC_ClassArrDict._vC_ActiveStreamId — подставить туда чужой логгер снаружи нельзя. Поэтому,
 ##	чтобы весь обход (и решения Class_UI, и внутренности UniversalBypass) попадал в ОДИН
-##	файл лога, а не в два независимых, весь код ниже (fC_SyncNodesWithConfig_Ch и всё, что
-##	она вызывает) читает/пишет ИМЕННО Class_ArrDict._vC_ActiveStreamId и
-##	Class_ArrDict.Class_Logger — а не свои собственные. Свой Class_Logger этого класса
+##	файл лога, а не в два независимых, весь код ниже (fC_SyncingNodesWithConfig_1111 и всё, что
+##	она вызывает) читает/пишет ИМЕННО vCC_ClassArrDict._vC_ActiveStreamId и
+##	vCC_ClassArrDict.Class_Logger — а не свои собственные. Свой Class_Logger этого класса
 ##	(объявлен чуть ниже) кодом синхронизации не используется, оставлен как было
-##2026-08-16 - mzs7 - ⚠️ БЫЛО ЗАМЕЧЕНО (починено ниже, 2026-08-17): fC_Mass_Creating_Node_CrTr
-##	звала Class_ArrDict.fC_Overgrowth_tree_Tr — такой функции в Class_ArrayAndOrDictionary.gd
+##2026-08-16 - mzs7 - ⚠️ БЫЛО ЗАМЕЧЕНО (починено ниже, 2026-08-17): fC_MassCreatingNode_0001
+##	звала vCC_ClassArrDict.fC_Overgrowth_tree_Tr — такой функции в Class_ArrayAndOrDictionary.gd
 ##	не было (только fC_OvergrowthIf_Tr, с другим именем И с другой сигнатурой callback).
 ##	f__Checking_conditions при этом никогда не вызывался и вся цепочка падала с
 ##	"Invalid call. Nonexistent function" при первом же вызове
-##2026-08-17 - mzs7 - fC_Mass_Creating_Node_CrTr починена и формат конфига сменился на
+##2026-08-17 - mzs7 - fC_MassCreatingNode_0001 починена и формат конфига сменился на
 ##	ВЛОЖЕННЫЙ: {ИмяНоды: {__Data_D:{...}, __Inspector_D:{...}, __Node_D:{...},
 ##	__Children_D: {ИмяРебёнка: {... тот же формат, рекурсивно ...}, ...}}, ...} —
 ##	__Children_D лежит РЯДОМ с __Data_D/__Inspector_D/__Node_D, в том же словаре ноды
@@ -39,27 +39,27 @@
 ##	— значит ребёнок"). Так по построению не может быть детей без родителей — раньше
 ##	путь и имя набирались руками и могли разойтись с реальной структурой словаря.
 ##	f__Checking_conditions (нерабочий, под старый формат) удалён, вместо него —
-##	f__MassCreateCallback, обход — Class_ArrDict.UniversalBypass (тот же обход, что и у
-##	fC_SyncNodesWithConfig_Ch). Имя ноды (__Inspector_D.name) и путь до родителя
+##	f__MassCreateCallback, обход — vCC_ClassArrDict.UniversalBypass (тот же обход, что и у
+##	fC_SyncingNodesWithConfig_1111). Имя ноды (__Inspector_D.name) и путь до родителя
 ##	(__Data_D.__Path_to_the_node_location_S) теперь ВСЕГДА выставляются автоматически —
 ##	из ключа словаря и цепочки PathArray (для пути — без учёта служебных "__Children_D"
 ##	в цепочке, см. _fC_StripChildrenMarker_A). Ручные __Path_to_the_node_location_S/name
 ##	в конфиге больше не нужны и будут молча перезаписаны. Формат конфига в примерах ниже
-##	(см. fC_Creating_Node_CrTr) — старый, для него путь по-прежнему нужно указывать
-##	руками; новый вложенный формат — только через fC_Mass_Creating_Node_CrTr/
-##	fC_SyncNodesWithConfig_Ch
+##	(см. fC_CreatingNode_1000) — старый, для него путь по-прежнему нужно указывать
+##	руками; новый вложенный формат — только через fC_MassCreatingNode_0001/
+##	fC_SyncingNodesWithConfig_1111
 ##2026-08-17 - mzs7 - f__SyncCallback_CreateOrUpdate/f__SyncCallback_Delete переведены на
 ##	тот же вложенный формат (__Children_D) и то же автоматическое имя/путь — иначе
-##	fC_Mass_Creating_Node_CrTr (создание) и fC_SyncNodesWithConfig_Ch (обновление/
+##	fC_MassCreatingNode_0001 (создание) и fC_SyncingNodesWithConfig_1111 (обновление/
 ##	переключение раскладки) ждали бы от Start_Program.gd два РАЗНЫХ формата одного и
 ##	того же экрана. Важно: старый/новый конфиг в _fC_SafeGetByPath ищутся по ИСХОДНОМУ
 ##	PathArray (С "__Children_D" внутри — у old и new одна и та же вложенность, поэтому
-##	путь совпадает буквально), а вот путь для fC_Creating_Node_CrTr считается через
+##	путь совпадает буквально), а вот путь для fC_CreatingNode_1000 считается через
 ##	_fC_StripChildrenMarker_A — Godot ничего не знает про "__Children_D", это чисто
 ##	наша служебная разметка. ⚠️ ИЗВЕСТНОЕ ОГРАНИЧЕНИЕ, НЕ РЕШЕНО: если у ноды с
 ##	вложенными детьми меняются __Data_D/__Node_D (триггер пересоздания в
 ##	_fC_SyncExistingNode) — она queue_free()-ится вместе со всеми детьми каскадно на
-##	уровне Godot, но fC_Creating_Node_CrTr пересоздаёт только ЕЁ саму, не спускаясь во
+##	уровне Godot, но fC_CreatingNode_1000 пересоздаёт только ЕЁ саму, не спускаясь во
 ##	вложенных детей заново; т.е. дети пересозданного контейнера сейчас не гарантированно
 ##	восстанавливаются в этом же проходе. Для точечных обновлений (__Inspector_D,
 ##	например якоря при смене ориентации) это не задевает — там всё ок
@@ -69,7 +69,7 @@
 ##	обёртка), его значение накапливается в A_BelongTo_A ПО ВСЕМ уровням от корня
 ##	до ноды (см. _fC_CollectBelongTo_A) и кладётся в реестр (vXD_All_nodes[имя]
 ##	["A_BelongTo_A"]) — это чисто логическая метка для массовых операций
-##	(fxC_MassDelitNode/fC_Node_changes_key ищут по ней), она может вообще не
+##	(fxC_MassDeletingNode_0010/fC_ChangingNodesByKey_0011 ищут по ней), она может вообще не
 ##	совпадать с реальной вложенностью. Раньше (см. запись 2026-08-17 выше)
 ##	A_BelongTo_A ошибочно заполнялся структурным путём — метки задваивали путь
 ##	и не несли отдельного смысла
@@ -88,8 +88,8 @@
 ##	_fC_WalkAncestorLevels_A (общий проход по PathArray от корня), поверх неё —
 ##	_fC_RealNodePath_A (путь Godot, только реальные ноды-предки, обёртки
 ##	пропускаются) и _fC_CollectBelongTo_A (см. выше). Обеим нужен КОРЕНЬ всего
-##	дерева конфига, а не только текущий уровень — поэтому fC_Mass_Creating_Node_CrTr
-##	и fC_SyncNodesWithConfig_Ch теперь передают его отдельным параметром в
+##	дерева конфига, а не только текущий уровень — поэтому fC_MassCreatingNode_0001
+##	и fC_SyncingNodesWithConfig_1111 теперь передают его отдельным параметром в
 ##	Parametrs (root добавлен к [vXD_All_nodes] и к [vXD_All_nodes, vXD_OldConfig])
 ##2026-08-18 - mzs7 - ⚠️ ПОПУТНО НАЙДЕН И ПОЧИНЕН БАГ: f__MassCreateCallback читал
 ##	InputArray по индексам [0],[3],[4],[5], хотя при "Parametrs": [vXD_All_nodes]
@@ -100,21 +100,21 @@
 ##	не запускалась в самом Godot. Правильные индексы для 1 своего параметра —
 ##	[0],[2],[3],[4]; сейчас, после добавления root вторым параметром (см. выше),
 ##	параметров стало 2 — индексы [0],[1],[3],[4],[5], как и у синхронизации
-##2026-08-19 - mzs7 - ⚠️ ДОЧИНЕНО: 2 "забытых" print() в fC_Creating_Node_CrTr (замечены
+##2026-08-19 - mzs7 - ⚠️ ДОЧИНЕНО: 2 "забытых" print() в fC_CreatingNode_1000 (замечены
 ##	при работе над Start_Program.gd/окном настроек) — changelog от 2026-08-16 выше says
-##	print/push_warning уже заменили на Class_ArrDict.Class_Logger.fC_Adding_Buffer_Cr, но
+##	print/push_warning уже заменили на vCC_ClassArrDict.Class_Logger.fC_Adding_Buffer_Cr, но
 ##	эти два пропустили при переносе. Заменены на ТОТ ЖЕ гейтованный паттерн, что уже везде
-##	в файле (if Class_ArrDict._vC_ActiveStreamId != "": ... fC_Adding_Buffer_Cr(...)) — не
+##	в файле (if vCC_ClassArrDict._vC_ActiveStreamId != "": ... fC_Adding_Buffer_Cr(...)) — не
 ##	новая логика, а доведение уже начатой миграции до конца. ⚠️ Важный нюанс: при вызове через
-##	fC_Mass_Creating_Node_CrTr (так строится экран при первом запуске — Start_Program._ready)
-##	Class_ArrDict._vC_ActiveStreamId сейчас НЕ регистрируется, значит эти два лога там
+##	fC_MassCreatingNode_0001 (так строится экран при первом запуске — Start_Program._ready)
+##	vCC_ClassArrDict._vC_ActiveStreamId сейчас НЕ регистрируется, значит эти два лога там
 ##	по-прежнему молчат — так же, как молчали бы и старые print(), просто теперь через общий
 ##	с остальным файлом механизм, а не отдельным способом. Регистрация отдельного потока для
 ##	mass-create — уже другая, более широкая задача, в эту правку не входит
 extends Node
 class_name Class_UI
 
-var Class_ArrDict = load("res://Godot_Template/Class_ArrayAndOrDictionary.gd").new()
+var vCC_ClassArrDict = load("res://Godot_Template/Class_ArrayAndOrDictionary.gd").new()
 
 #Функционал:
 #	Создание и вставка узла в сцену по конфигурации
@@ -129,9 +129,9 @@ var Class_ArrDict = load("res://Godot_Template/Class_ArrayAndOrDictionary.gd").n
 #	3. Подключает сигналы из __Node_D
 #	4. Вставляет в указанный контейнер текущей сцены
 #	5. Возвращает инфу о созданном узле
-func fC_Creating_Node_CrTr(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> Dictionary:
-	if Class_ArrDict._vC_ActiveStreamId != "":
-		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: start", [], null)
+func fC_CreatingNode_1000(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> Dictionary:
+	if vCC_ClassArrDict._vC_ActiveStreamId != "":
+		Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "fC_CreatingNode_1000: start", [], null)
 
 	# 0. Подготовка словарей
 	var pLX_Data_D: Dictionary = X_NodeConfig_D.get("__Data_D", {})
@@ -209,8 +209,8 @@ func fC_Creating_Node_CrTr(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> D
 	# 5. Возврат результата
 	var pLX_NodeName_S: String = pLX_Inspector_D.get("name", "UnnamedNode")
 
-	if Class_ArrDict._vC_ActiveStreamId != "":
-		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fC_Creating_Node_CrTr: node created and inserted", [pLX_NodeName_S, str(pLX_InsertPath)], null)
+	if vCC_ClassArrDict._vC_ActiveStreamId != "":
+		Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "fC_CreatingNode_1000: node created and inserted", [pLX_NodeName_S, str(pLX_InsertPath)], null)
 	return {
 		pLX_NodeName_S: {
 			"Node": pLX_NodeObj,
@@ -238,10 +238,10 @@ func fC_Creating_Node_CrTr(X_NodeConfig_D: Dictionary, A_BelongTo_A: Array) -> D
 #	Выходные:
 #		Нет (vXD_All_nodes и сам vXD_NodeConfig изменяются на месте)
 #Принцип работы:
-#	Один проход Class_ArrDict.UniversalBypass с f__MassCreateCallback — тот же
-#	обход, что использует fC_SyncNodesWithConfig_Ch
-func fC_Mass_Creating_Node_CrTr(vXD_NodeConfig: Dictionary, vXD_All_nodes: Dictionary) -> void:
-	Class_ArrDict.UniversalBypass(vXD_NodeConfig, {"func": f__MassCreateCallback, "Parametrs": [vXD_All_nodes, vXD_NodeConfig]})
+#	Один проход vCC_ClassArrDict.UniversalBypass с f__MassCreateCallback — тот же
+#	обход, что использует fC_SyncingNodesWithConfig_1111
+func fC_MassCreatingNode_0001(vXD_NodeConfig: Dictionary, vXD_All_nodes: Dictionary) -> void:
+	vCC_ClassArrDict.UniversalBypass(vXD_NodeConfig, {"func": f__MassCreateCallback, "Parametrs": [vXD_All_nodes, vXD_NodeConfig]})
 
 
 #Функционал:
@@ -292,8 +292,8 @@ func _fC_RealNodePath_A(vLD_Root: Dictionary, vLA_PathArray: Array) -> Array:
 #	"v__Ebeveyn", встреченные на ВСЕХ промежуточных уровнях по пути от корня (см.
 #	changelog 2026-08-18: раньше эту роль играл старый f__Checking_conditions).
 #	Это НЕ путь в дереве сцены (его считает _fC_RealNodePath_A) — отдельная,
-#	чисто логическая метка для массовых операций (fxC_MassDelitNode,
-#	fC_Node_changes_key), которая может вообще не совпадать с реальной структурой
+#	чисто логическая метка для массовых операций (fxC_MassDeletingNode_0010,
+#	fC_ChangingNodesByKey_0011), которая может вообще не совпадать с реальной структурой
 #Форматы данных:
 #	Входные:
 #		vLD_Root: Dictionary, vLA_PathArray: Array — как в _fC_WalkAncestorLevels_A
@@ -309,7 +309,7 @@ func _fC_CollectBelongTo_A(vLD_Root: Dictionary, vLA_PathArray: Array) -> Array:
 
 
 #Функционал:
-#	Callback для UniversalBypass, вызываемый fC_Mass_Creating_Node_CrTr — для
+#	Callback для UniversalBypass, вызываемый fC_MassCreatingNode_0001 — для
 #	каждого ключа дерева решает: это нода (создать) или нет. Специального
 #	ключа-маркера у обёрток больше нет (см. changelog 2026-08-18) — любой
 #	Dictionary, который сам не является нодой, просто обходится глубже
@@ -341,7 +341,7 @@ func f__MassCreateCallback(InputArray: Array) -> String:
 		vLD_Value["__Inspector_D"]["name"] = vL_Key
 		vLD_Value["__Data_D"]["__Path_to_the_node_location_S"] = vLS_ParentPath_S
 
-		var vLD_Created: Dictionary = fC_Creating_Node_CrTr(vLD_Value, vLA_BelongTo_A)
+		var vLD_Created: Dictionary = fC_CreatingNode_1000(vLD_Value, vLA_BelongTo_A)
 		vXD_All_nodes.merge(vLD_Created)
 
 	# Рекурсия внутрь ЭТОГО ЖЕ словаря — тут может найтись её обёртка с детьми
@@ -357,7 +357,7 @@ func f__MassCreateCallback(InputArray: Array) -> String:
 #		Нет
 #Принцип работы:
 #	Как именно функция достигает результата, какие шаги предпринимает
-func fC_Node_changes_key (vXD_All_nodes: Dictionary, vXA_Array_key: Array, vLS_func: Callable, vLD_func_variable: Dictionary):
+func fC_ChangingNodesByKey_0011 (vXD_All_nodes: Dictionary, vXA_Array_key: Array, vLS_func: Callable, vLD_func_variable: Dictionary):
 	var vL_Array_Del := []
 	var v__Result
 	
@@ -385,7 +385,7 @@ func fC_Node_changes_key (vXD_All_nodes: Dictionary, vXA_Array_key: Array, vLS_f
 #		Dictionary с уникальными узлами
 #Принцип работы:
 #	Создает N копий с заменой %N на индекс
-func fxG_BatchFillNodeConfig_Cr(vD_BaseTemplate: Dictionary, vD_DiffTemplate: Dictionary, vI_Count: int) -> Dictionary:
+func fxG_BatchFillingNodeConfig_1000(vD_BaseTemplate: Dictionary, vD_DiffTemplate: Dictionary, vI_Count: int) -> Dictionary:
 	var vD_Result: Dictionary = {}
 
 	for vI_N in range(vI_Count):
@@ -412,22 +412,22 @@ func fxG_BatchFillNodeConfig_Cr(vD_BaseTemplate: Dictionary, vD_DiffTemplate: Di
 
 #Функционал:
 #	Изменяет свойства существующих нод
-func fxC_UpdateExistingNodes_Ch(vXD_All_nodes: Dictionary, vD_Changes: Dictionary):
+func fxC_UpdatingExistingNodes_0100(vXD_All_nodes: Dictionary, vD_Changes: Dictionary):
 	for name in vD_Changes:
 		if not vXD_All_nodes.has(name):
-			if Class_ArrDict._vC_ActiveStreamId != "":
-				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: node not found", [name], "push_warning")
+			if vCC_ClassArrDict._vC_ActiveStreamId != "":
+				Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "fxC_UpdatingExistingNodes_0100: node not found", [name], "push_warning")
 			push_warning("⚠️ Нода %s не найдена для обновления." % name)
 			continue
 		var node = vXD_All_nodes[name]["Node"]
 		for property in vD_Changes[name]:
 			if property in node:
 				node.set(property, vD_Changes[name][property])
-				if Class_ArrDict._vC_ActiveStreamId != "":
-					Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property updated", [name, property, vD_Changes[name][property]], null)
+				if vCC_ClassArrDict._vC_ActiveStreamId != "":
+					Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "fxC_UpdatingExistingNodes_0100: property updated", [name, property, vD_Changes[name][property]], null)
 			else:
-				if Class_ArrDict._vC_ActiveStreamId != "":
-					Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "fxC_UpdateExistingNodes_Ch: property not found on node", [name, property], "push_warning")
+				if vCC_ClassArrDict._vC_ActiveStreamId != "":
+					Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "fxC_UpdatingExistingNodes_0100: property not found on node", [name, property], "push_warning")
 				push_warning("⚠️ Свойство %s не найдено у ноды %s." % [property, name])
 
 
@@ -468,20 +468,20 @@ func _fC_SafeGetByPath(vLD_Root: Dictionary, vLA_Path: Array):
 #	1. Проход по новому конфигу (UniversalBypass) — создаёт отсутствовавшие ноды, точечно
 #	   обновляет/пересоздаёт изменившиеся
 #	2. Проход по старому конфигу (UniversalBypass) — удаляет ноды, которых больше нет в новом
-#	Обход — Class_ArrDict.UniversalBypass; логи — в Class_ArrDict.Class_Logger, см. changelog
-func fC_SyncNodesWithConfig_Ch(vXD_All_nodes: Dictionary, vXD_OldConfig: Dictionary, vXD_NewConfig: Dictionary) -> Dictionary:
+#	Обход — vCC_ClassArrDict.UniversalBypass; логи — в vCC_ClassArrDict.Class_Logger, см. changelog
+func fC_SyncingNodesWithConfig_1111(vXD_All_nodes: Dictionary, vXD_OldConfig: Dictionary, vXD_NewConfig: Dictionary) -> Dictionary:
 	var vLS_StreamId: String = Logger.fC_RegisterStream_Cr("UI:Sync")
-	Class_ArrDict._vC_ActiveStreamId = vLS_StreamId
+	vCC_ClassArrDict._vC_ActiveStreamId = vLS_StreamId
 
-	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: start, pass 1 (create/update)", [], null)
-	Class_ArrDict.UniversalBypass(vXD_NewConfig, {"func": f__SyncCallback_CreateOrUpdate, "Parametrs": [vXD_All_nodes, vXD_OldConfig, vXD_NewConfig]})
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncingNodesWithConfig_1111: start, pass 1 (create/update)", [], null)
+	vCC_ClassArrDict.UniversalBypass(vXD_NewConfig, {"func": f__SyncCallback_CreateOrUpdate, "Parametrs": [vXD_All_nodes, vXD_OldConfig, vXD_NewConfig]})
 
-	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: pass 2 (delete)", [], null)
-	Class_ArrDict.UniversalBypass(vXD_OldConfig, {"func": f__SyncCallback_Delete, "Parametrs": [vXD_All_nodes, vXD_NewConfig]})
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncingNodesWithConfig_1111: pass 2 (delete)", [], null)
+	vCC_ClassArrDict.UniversalBypass(vXD_OldConfig, {"func": f__SyncCallback_Delete, "Parametrs": [vXD_All_nodes, vXD_NewConfig]})
 
-	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncNodesWithConfig_Ch: done", [], null)
+	Logger.fC_Adding_Buffer_Cr(vLS_StreamId, "fC_SyncingNodesWithConfig_1111: done", [], null)
 	Logger.fC_FinishStream_Ch(vLS_StreamId)
-	Class_ArrDict._vC_ActiveStreamId = ""
+	vCC_ClassArrDict._vC_ActiveStreamId = ""
 
 	return vXD_NewConfig.duplicate(true)
 
@@ -520,13 +520,13 @@ func f__SyncCallback_CreateOrUpdate(InputArray: Array) -> String:
 		# вложенность (какими бы ни были имена обёрток), путь совпадает буквально
 		var vLD_OldVal = _fC_SafeGetByPath(vXD_OldConfig, vLA_PathArray)
 		if typeof(vLD_OldVal) != TYPE_DICTIONARY or not _fC_IsNodeConfig(vLD_OldVal):
-			if Class_ArrDict._vC_ActiveStreamId != "":
-				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: new node, creating", [vLA_PathArray.duplicate()], null)
-			var vLD_Created = fC_Creating_Node_CrTr(vLD_NewVal, vLA_BelongTo_A)
+			if vCC_ClassArrDict._vC_ActiveStreamId != "":
+				Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: new node, creating", [vLA_PathArray.duplicate()], null)
+			var vLD_Created = fC_CreatingNode_1000(vLD_NewVal, vLA_BelongTo_A)
 			vXD_All_nodes.merge(vLD_Created)
 		else:
-			if Class_ArrDict._vC_ActiveStreamId != "":
-				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: existing node, comparing", [vLA_PathArray.duplicate()], null)
+			if vCC_ClassArrDict._vC_ActiveStreamId != "":
+				Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "f__SyncCallback_CreateOrUpdate: existing node, comparing", [vLA_PathArray.duplicate()], null)
 			_fC_SyncExistingNode(vXD_All_nodes, vLD_OldVal, vLD_NewVal, vLA_BelongTo_A)
 
 	# Рекурсия внутрь ЭТОГО ЖЕ словаря — тут может найтись её обёртка с детьми
@@ -555,8 +555,8 @@ func f__SyncCallback_Delete(InputArray: Array) -> String:
 	if _fC_IsNodeConfig(vLD_OldVal):
 		var vLD_NewVal = _fC_SafeGetByPath(vXD_NewConfig, vLA_PathArray)
 		if typeof(vLD_NewVal) != TYPE_DICTIONARY or not _fC_IsNodeConfig(vLD_NewVal):
-			if Class_ArrDict._vC_ActiveStreamId != "":
-				Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "f__SyncCallback_Delete: node removed from config, deleting", [vLA_PathArray.duplicate()], null)
+			if vCC_ClassArrDict._vC_ActiveStreamId != "":
+				Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "f__SyncCallback_Delete: node removed from config, deleting", [vLA_PathArray.duplicate()], null)
 			_fC_DeleteNodeByConfigKey(vXD_All_nodes, vLD_OldVal)
 			# Дальше НЕ "return Further" — идём "Deeper" и по бывшим детям тоже,
 			# чтобы вычистить их из vXD_All_nodes (сами Godot-ноды каскадно
@@ -568,11 +568,11 @@ func f__SyncCallback_Delete(InputArray: Array) -> String:
 
 #Функционал:
 #	Сравнивает старую и новую конфигурацию одной ноды через fC_ComparisonsOf2Variables_0101
-#	и решает: ничего не делать / точечно обновить (.set через fxC_UpdateExistingNodes_Ch) /
-#	пересоздать (queue_free + fC_Creating_Node_CrTr) — см. changelog про гибридную стратегию
+#	и решает: ничего не делать / точечно обновить (.set через fxC_UpdatingExistingNodes_0100) /
+#	пересоздать (queue_free + fC_CreatingNode_1000) — см. changelog про гибридную стратегию
 func _fC_SyncExistingNode(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dictionary, vLD_NewNodeConfig: Dictionary, A_BelongTo_A: Array):
 	var vLD_Diff: Dictionary = {}
-	Class_ArrDict.fC_ComparisonsOf2Variables_0101(vLD_OldNodeConfig, vLD_NewNodeConfig, vLD_Diff)
+	vCC_ClassArrDict.fC_ComparisonsOf2Variables_0101(vLD_OldNodeConfig, vLD_NewNodeConfig, vLD_Diff)
 
 	if String(vLD_Diff.get("result", "")).begins_with("+"):
 		# Полное совпадение — менять нечего
@@ -590,14 +590,14 @@ func _fC_SyncExistingNode(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dictiona
 	var vLS_OldName: String = vLD_OldNodeConfig.get("__Inspector_D", {}).get("name", "")
 
 	if vLB_NeedsRecreate:
-		if Class_ArrDict._vC_ActiveStreamId != "":
-			Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: __Data_D/__Node_D changed, recreating", [vLS_OldName], null)
+		if vCC_ClassArrDict._vC_ActiveStreamId != "":
+			Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: __Data_D/__Node_D changed, recreating", [vLS_OldName], null)
 		if vXD_All_nodes.has(vLS_OldName):
 			vXD_All_nodes[vLS_OldName]["Node"].queue_free()
 			vXD_All_nodes.erase(vLS_OldName)
 		else:
 			push_warning("⚠️ Нода %s не найдена в реестре для пересоздания." % vLS_OldName)
-		var vLD_Created = fC_Creating_Node_CrTr(vLD_NewNodeConfig, A_BelongTo_A)
+		var vLD_Created = fC_CreatingNode_1000(vLD_NewNodeConfig, A_BelongTo_A)
 		vXD_All_nodes.merge(vLD_Created)
 		return
 
@@ -622,9 +622,9 @@ func _fC_SyncExistingNode(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dictiona
 	if vLD_ChangedProps.is_empty():
 		return
 
-	if Class_ArrDict._vC_ActiveStreamId != "":
-		Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: only __Inspector_D changed, point-updating", [vLS_OldName, vLD_ChangedProps], null)
-	fxC_UpdateExistingNodes_Ch(vXD_All_nodes, {vLS_OldName: vLD_ChangedProps})
+	if vCC_ClassArrDict._vC_ActiveStreamId != "":
+		Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "_fC_SyncExistingNode: only __Inspector_D changed, point-updating", [vLS_OldName, vLD_ChangedProps], null)
+	fxC_UpdatingExistingNodes_0100(vXD_All_nodes, {vLS_OldName: vLD_ChangedProps})
 
 
 #Функционал:
@@ -640,20 +640,20 @@ func _fC_DeleteNodeByConfigKey(vXD_All_nodes: Dictionary, vLD_OldNodeConfig: Dic
 			vL_Node.queue_free()
 		vXD_All_nodes.erase(vLS_Name)
 	else:
-		if Class_ArrDict._vC_ActiveStreamId != "":
-			Logger.fC_Adding_Buffer_Cr(Class_ArrDict._vC_ActiveStreamId, "_fC_DeleteNodeByConfigKey: node not found in registry", [vLS_Name], "push_warning")
+		if vCC_ClassArrDict._vC_ActiveStreamId != "":
+			Logger.fC_Adding_Buffer_Cr(vCC_ClassArrDict._vC_ActiveStreamId, "_fC_DeleteNodeByConfigKey: node not found in registry", [vLS_Name], "push_warning")
 		push_warning("⚠️ Нода %s не найдена в реестре для удаления." % vLS_Name)
 
 
 #Функционал:
 #	Выполнить смену сцены с любого места
-func fxC_SceneSwitching (scene_path):
+func fxC_SwitchingScene_0000 (scene_path):
 	get_tree().call_deferred("change_scene_to_file", scene_path)
 
 
 #Функционал:
 #Удаляет ноды по условию
-func fxC_MassDelitNode(MassOfExistingNodes: Dictionary, RemovalCondition: Callable) -> void:
+func fxC_MassDeletingNode_0010(MassOfExistingNodes: Dictionary, RemovalCondition: Callable) -> void:
 	# Массив для удаления
 	var v_DeletionQueue_A: Array = []
 
